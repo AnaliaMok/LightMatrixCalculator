@@ -15,16 +15,16 @@ public class Ptui implements Observer{
     /**
      * Instance of current model object
      */
-    private CalculationsModel model = new CalculationsModel();
+    private CalculationsModel model;
 
 
     /**
      * Constructor of ptui
      */
     public Ptui(){
+        this.model = new CalculationsModel();
         this.model.addObserver(this);
     }
-
 
     @Override
     public void update(Observable o, Object arg){
@@ -32,4 +32,13 @@ public class Ptui implements Observer{
         System.out.println("Result:");
         this.model.display();
     }
-}
+
+    /**
+     * Getter method for the model defined during creation of PTUI
+     * @return the model held defined in the Ptui
+     */
+    public CalculationsModel getModel(){
+        return this.model;
+    } // End of getModel
+
+} // End of Ptui class

@@ -10,7 +10,6 @@ import java.util.Observable;
  */
 public class CalculationsModel extends Observable {
 
-
     /**
      * Displays current state of the result matrix
      * @return
