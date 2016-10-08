@@ -5,6 +5,8 @@ import ptui.Ptui;
  * Main Class of LightMatrixCalculator Project
  * The "runner" of the overall project
  *
+ * This program is meant to execute non-boolean calculations
+ *
  * @author Analia Mok
  */
 public class MatrixCalc {

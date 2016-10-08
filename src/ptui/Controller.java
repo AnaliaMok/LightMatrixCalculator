@@ -11,7 +11,7 @@ public class Controller {
     /**
      * Instance of the model class
      */
-    CalculationsModel model;
+    private CalculationsModel model;
 
     /**
      * Main constructor of Controller
@@ -19,7 +19,6 @@ public class Controller {
      */
     public Controller(CalculationsModel model){
         this.model = model;
-
     }
 
 
