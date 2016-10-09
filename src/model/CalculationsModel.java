@@ -14,7 +14,7 @@ public class CalculationsModel extends Observable {
      * The answer to the previous/most recent calculation
      * Can be used in the most immediate calculation
      */
-    private Optional<Matrix> answer;
+    private Optional<MatrixModel> answer;
 
     /**
      * Pre-condition: ref field has not been initialized yet
