@@ -102,7 +102,7 @@ public class MatrixModel {
             }
 
             //Else, insert a one on the diagonal
-            this.identity[i][i] = 1;
+            this.identity[i][i] = 1; //TODO: Need to fix for non-square matrices
         }
     } // End of makeIdentity
 
@@ -160,7 +160,7 @@ public class MatrixModel {
 
         //Occupying transpose
         //Iterating as if the matrix was a one dimensional array
-        for(int i = 0; i < (this.dims[0]*this.dims[1]); i++){
+        for(int i = 0; i < (this.dims[0]*this.dims[1]); i++){ //TODO: Might need to fix for non-square matrices
             // Determine the current row and column in this.matrix
             // with division & modulus
             int row = (int)Math.floor(i/dims[0]);
@@ -173,7 +173,7 @@ public class MatrixModel {
 
 
     @Override
-    public String toString(){
+    public String toString(){ //TODO: Might just print row by row in CalculationsModel display method
         String result = "";
 
         // Iterating through the matrix as if it were a one dimensional array
@@ -181,7 +181,9 @@ public class MatrixModel {
             // Determine the current row and column in this.matrix
             // with division & modulus
             int row = (int)Math.floor(i/dims[0]);
+            if(row == this.dims[0]) row--;
             int col = i%dims[1];
+            if(col == this.dims[1]) col--;
 
             // Adding the left vertical of the line
             if(col == 0){

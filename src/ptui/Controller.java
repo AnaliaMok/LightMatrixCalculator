@@ -28,13 +28,17 @@ public class Controller {
      */
     public void run() {
         // Manually creating a matrix to test MatrixModel
-        int[] dims = {2, 2};
+        /*int[] dims = {2,2};
         MatrixModel mmodel = new MatrixModel(dims);
         mmodel.insert(1.0, 0, 0);
         mmodel.insert(2.0, 0, 1);
         mmodel.insert(3.0, 1, 0);
-        mmodel.insert(12.0, 1, 1);
+        mmodel.insert(4.0, 1, 1);
         System.out.println(mmodel.toString());
+
+        double[][] identity = mmodel.getTranspose();
+        System.out.println(identity);*/
+
 
     }
 
