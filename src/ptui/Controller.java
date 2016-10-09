@@ -1,6 +1,7 @@
 package ptui;
 
 import model.CalculationsModel;
+import model.MatrixModel;
 
 /**
  * Controller Class handles all input for the plain-text view
@@ -25,8 +26,16 @@ public class Controller {
     /**
      * Runs interactive mode and calls appropriate functions in model
      */
-    public void run(){
-        //TODO
+    public void run() {
+        // Manually creating a matrix to test MatrixModel
+        int[] dims = {2, 2};
+        MatrixModel mmodel = new MatrixModel(dims);
+        mmodel.insert(1.0, 0, 0);
+        mmodel.insert(2.0, 0, 1);
+        mmodel.insert(3.0, 1, 0);
+        mmodel.insert(12.0, 1, 1);
+        System.out.println(mmodel.toString());
+
     }
 
-}
+} // End of Controller class

@@ -176,12 +176,6 @@ public class MatrixModel {
     public String toString(){
         String result = "";
 
-        // Creating the top and bottom borders based on the total # of columns
-        char[] borderChars = new char[this.dims[1]];
-        Arrays.fill(borderChars, '-');
-        String border = new String(borderChars);
-        result += border;
-
         // Iterating through the matrix as if it were a one dimensional array
         for(int i = 0; i < (this.dims[0]*this.dims[1]); i++){
             // Determine the current row and column in this.matrix
@@ -209,8 +203,6 @@ public class MatrixModel {
 
         }
 
-        // Adding bottom border
-        result += border;
         return result;
     }
 
