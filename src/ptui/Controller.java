@@ -3,6 +3,8 @@ package ptui;
 import model.CalculationsModel;
 import model.MatrixModel;
 
+import java.util.Scanner;
+
 /**
  * Controller Class handles all input for the plain-text view
  * @author Analia Mok
@@ -38,8 +40,10 @@ public class Controller {
 
         double[][] identity = mmodel.getTranspose();
         System.out.println(identity);*/
+        Scanner in = new Scanner(System.in);
 
 
+        in.close();
     }
 
 } // End of Controller class

@@ -20,7 +20,7 @@ public class CalculationsModel extends Observable {
      * Pre-condition: ref field has not been initialized yet
      * Row reduces the current matrix to Row Echelon Form(REF)
      */
-    public void toREF(){
+    public void toREF(MatrixModel m){
         //TODO
     } // End of toREF
 
@@ -31,7 +31,7 @@ public class CalculationsModel extends Observable {
      * Will call toREF if ref field has not been initialized
      * @return rref matrix
      */
-    public void toRREF(){
+    public void toRREF(MatrixModel m){
         //TODO
     } // End of toRREF
 
