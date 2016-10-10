@@ -29,13 +29,14 @@ enum Keyword {
     ADD("A"), SMULT("SM"), MULT("M"), SUB("S"), INVERSE("INV"), TRANSPOSE("T"), REF("REF"), RREF("RREF"),
     ANS("ANS"), DISPLAY("D"), HELP("H"), QUIT("Q"), UNKNOWN("U");
 
-    /* THe corresponding shorthand command of a given keyword*/
+    // The corresponding shorthand command of a given keyword
     String shorthand;
 
-    /* Private constructor to help assign shorthands */
+    /** Private constructor to help assign shorthands */
     Keyword(String shorthand) {
         this.shorthand = shorthand;
     }
+
 
     /**
      * Overrides the toString method so that the full names
@@ -45,35 +46,25 @@ enum Keyword {
      */
     @Override
     public String toString() {
+        // NOTE: I don't normally write my switch statements like this
+        // but since each case only has one line of code, I scrunched
+        // all the lines like this make it easier to read
         switch (this) {
-            case ADD:
-                return "ADD";
-            case SMULT:
-                return "SCALAR MULTIPLICATION";
-            case MULT:
-                return "MULTIPLY";
-            case SUB:
-                return "SUBTRACT";
-            case INVERSE:
-                return "INVERSE";
-            case TRANSPOSE:
-                return "TRANSPOSE";
-            case REF:
-                return "REF";
-            case RREF:
-                return "RREF";
-            case ANS:
-                return "ANSWER";
-            case DISPLAY:
-                return "DISPLAY";
-            case HELP:
-                return "HELP";
-            case QUIT:
-                return "QUIT";
-            default:
-                return "UNKNOWN";
+            case ADD: return "ADD";
+            case SMULT: return "SCALAR MULTIPLICATION";
+            case MULT: return "MULTIPLY";
+            case SUB: return "SUBTRACT";
+            case INVERSE: return "INVERSE";
+            case TRANSPOSE: return "TRANSPOSE";
+            case REF: return "REF";
+            case RREF: return "RREF";
+            case ANS: return "ANSWER";
+            case DISPLAY: return "DISPLAY";
+            case HELP: return "HELP";
+            case QUIT: return "QUIT";
+            default: return "UNKNOWN";
         }
-    }
+    } // End of toString
 
     /* Takes in a shorthand and returns the corresponding Keyword */
     private static Keyword readShorthand(String sh){
