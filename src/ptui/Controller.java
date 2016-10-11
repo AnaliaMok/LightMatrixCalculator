@@ -70,7 +70,66 @@ public class Controller {
     private void quit(){
         System.out.printf("Good-bye.");
         System.exit(-1);
-    }
+    } // End of quit
+
+
+    /**
+     * acceptMatrix asks for the dimensions and the elements
+     * of a given matrix
+     * @param in A Scanner object to accept user input
+     * @return A MatrixModel object holding inputted values
+     */
+    private MatrixModel acceptMatrix(Scanner in){
+        // Accept dimensions
+        int[] dims = new int[2];
+        System.out.print("Enter the dimensions of a matrix(separated with a space): ");
+
+        // Split the input into an array of Strings
+        String[] input = (in.nextLine().trim()).split(" ");
+
+        // In case user enters nothing
+        while(input.length < 1){
+            System.out.print("Please enter at least one integer (i.e. 5): ");
+            input = (in.nextLine().trim()).split(" ");
+        }
+
+        // If only one value was inputted, make a square matrix
+        if(input.length == 1){
+            dims[0] = dims[1] = Integer.parseInt(input[0]);
+        }else{
+            // Else, just take the first two values
+            dims[0] = Integer.parseInt(input[0]);
+            dims[1] = Integer.parseInt(input[1]);
+        }
+
+        // Instantiate a MatrixModel object with dima
+        MatrixModel newM = new MatrixModel(dims);
+
+        // Accept User Input & Insert into newM
+        // If too many elements are given, just don't accept excess
+        // If too little are given, have user re-enter line
+        for(int row = 0; row < dims[0]; row++){
+            //TODO: Might want to start counting rows from 1 instead of zero
+            //TODO: Some users may not be comfortable counting from zero
+            System.out.printf("Enter values for row %d separated by spaces: ", row);
+            input = (in.nextLine().trim()).split(" ");
+
+            // If not enough values were given, start back at the top
+            if(input.length < dims[1]){
+                System.out.println("USAGE: Not enough values entered");
+                row--;
+                continue;
+            }
+            // If too many values given, just take dims[1] values, where dims[1] = # columns
+            // TODO: Find a more efficient way of doing this
+            for(int col = 0; col < dims[1]; col++){
+                newM.insert(Double.parseDouble(input[col]), row, col);
+            }
+
+        }
+        System.out.println(newM.toString());
+        return newM;
+    } // End of acceptMatrix
 
 
     /**
@@ -83,10 +142,14 @@ public class Controller {
      */
     private boolean commandHandle(Keyword kw, Scanner in){
         switch(kw){
+            case ADD:
+                acceptMatrix(in);
+                break;
             case SMULT:
                 System.out.print("Please enter a scalar: ");
                 int scalar = Integer.parseInt(in.nextLine().trim());
                 //TODO: Accept a matrix
+                break;
             case HELP:
                 helpCmd();
                 break;
@@ -112,7 +175,7 @@ public class Controller {
         while((currLine = in.nextLine().trim()) != null){
             Keyword kw = Keyword.getKeyword(currLine);
             commandHandle(kw, in);
-        }
+        }//*/
 
         in.close();
     }

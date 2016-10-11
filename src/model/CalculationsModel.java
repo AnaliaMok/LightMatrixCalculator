@@ -34,6 +34,18 @@ public class CalculationsModel extends Observable {
 
 
     /**
+     * hasSameDims checks to see if two given 2-elements arrays
+     * are EQUAL
+     * @param dims1 Integer array representing dimensions of a matrix
+     * @param dims2 Integer array representing dimensions of a matrix
+     * @return True if dimensions are equal; false otherwise
+     */
+    public boolean hasSameDims(int[] dims1, int[] dims2){
+        return ((dims1[0] == dims2[0]) && (dims1[1] == dims2[1]));
+    } // End of hasSameDims
+
+
+    /**
      * Post-condition: matrices Queue is re-initialized; answer is Empty
      * clear is used to clear all values in the current matrices Queue
      * clear also empties the current;y stored answer
@@ -62,7 +74,18 @@ public class CalculationsModel extends Observable {
         return true;
     } // End of addAns
 
-    /* CALCULATION METHODS*/
+
+    /**
+     * addMatrix takes a MatrixModel object and enqueues it to
+     * the matrices Queue
+     * @param m A MatrixModel object
+     */
+    public void addMatrix(MatrixModel m){
+        this.matrices.add(m);
+    } // End of addMatrix
+
+
+    /* CALCULATION METHODS */
 
     /**
      * Pre-condition: Matrices have the same dimensions
