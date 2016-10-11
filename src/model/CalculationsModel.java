@@ -46,12 +46,29 @@ public class CalculationsModel extends Observable {
 
 
     /**
+     * Pre-condition: Keyword kw is a calculation keyword
      * matrixCheck is used to see if the current set of matrices in
      * the Queue is valid for the given calculation
+     * @param kw Keyword representing the current calculation
      * @return true if calculation can continue; false otherwise
      */
-    public boolean matrixCheck(){
-        return true;
+    public boolean matrixCheck(Keyword kw){
+        switch(kw){
+            case ADD:
+            case SUB:
+                //TODO: Look through the queue while also placing the
+                //TODO: matrices back into the queue
+                break;
+            case MULT:
+                //TODO: Check inner dimensions
+                break;
+            case INVERSE:
+                //TODO: Check to see if front is a square matrix
+                break;
+            default:
+                return true;
+        }
+        return true; // Will never be reached, but here to make Java happu
     } // End of matrixCheck
 
 
