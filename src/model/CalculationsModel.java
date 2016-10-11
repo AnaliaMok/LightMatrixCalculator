@@ -40,9 +40,19 @@ public class CalculationsModel extends Observable {
      * @param dims2 Integer array representing dimensions of a matrix
      * @return True if dimensions are equal; false otherwise
      */
-    public boolean hasSameDims(int[] dims1, int[] dims2){
+    private boolean hasSameDims(int[] dims1, int[] dims2){
         return ((dims1[0] == dims2[0]) && (dims1[1] == dims2[1]));
     } // End of hasSameDims
+
+
+    /**
+     * matrixCheck is used to see if the current set of matrices in
+     * the Queue is valid for the given calculation
+     * @return true if calculation can continue; false otherwise
+     */
+    public boolean matrixCheck(){
+        return true;
+    } // End of matrixCheck
 
 
     /**
@@ -70,8 +80,11 @@ public class CalculationsModel extends Observable {
      * @return true is a matrix was enqueued successfully; false otherwise
      */
     public boolean addAns(){
-        //TODO
-        return true;
+        if(answer.isPresent()){
+            addMatrix(answer.get());
+            return true;
+        }
+        return false;
     } // End of addAns
 
 

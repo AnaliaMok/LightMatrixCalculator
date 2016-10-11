@@ -1,4 +1,4 @@
-package ptui;
+package model;
 
 /**
  * Defines the set of Keywords/Commands that a user can
@@ -24,7 +24,7 @@ package ptui;
  *
  * @author Analia Mok
  */
-enum Keyword {
+public enum Keyword {
 
     ADD("A"), SMULT("SM"), MULT("M"), SUB("S"), INVERSE("INV"), TRANSPOSE("T"), REF("REF"), RREF("RREF"),
     ANS("ANS"), DISPLAY("D"), HELP("H"), CLEAR("C"), QUIT("Q"), UNKNOWN("U");

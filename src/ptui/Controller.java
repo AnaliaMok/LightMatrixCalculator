@@ -1,6 +1,7 @@
 package ptui;
 
 import model.CalculationsModel;
+import model.Keyword;
 import model.MatrixModel;
 
 import java.util.Scanner;
@@ -31,8 +32,8 @@ public class Controller {
     private void startMsg(){
         System.out.println("--------------- Matrix Calculator ----------------\n");
         helpCmd();
-        System.out.println("***To use previous answer in current calculation, type ANS keyword");
-        System.out.println("when entering dimensions of a matrix.");
+        System.out.println("***To use previous answer in current calculation, type ANS");
+        System.out.println("when entering dimensions of a matrix.***");
     }
 
 
@@ -84,13 +85,36 @@ public class Controller {
         int[] dims = new int[2];
         System.out.print("Enter the dimensions of a matrix(separated with a space): ");
 
+        String currLine = in.nextLine().trim();
+
         // Split the input into an array of Strings
-        String[] input = (in.nextLine().trim()).split(" ");
+        String[] input = currLine.split(" ");
+
+        // Check if User Entered Correct Keyword to use previous answer
+        if(currLine.toUpperCase().equals("ANS")){
+            if(!this.model.addAns()){
+                System.out.println("There is no previous answer to use.");
+                input = new String[0]; // Will lead to the while loop directly below
+            }else {
+                return null;
+            }
+        }
 
         // In case user enters nothing
         while(input.length < 1){
-            System.out.print("Please enter at least one integer (i.e. 5): ");
-            input = (in.nextLine().trim()).split(" ");
+            System.out.print("Please enter at least one integer (or ANS to use previous answer): ");
+            currLine = in.nextLine().trim();
+            input = currLine.split(" ");
+
+            // Check to see if user entered ANS or ans
+            if(currLine.toUpperCase().equals("ANS")){
+                if(!this.model.addAns()){
+                    System.out.println("There is no previous answer to use.");
+                    input = new String[0]; // Will lead to the while loop directly below
+                }else {
+                    return null;
+                }
+            }
         }
 
         // If only one value was inputted, make a square matrix
@@ -127,9 +151,35 @@ public class Controller {
             }
 
         }
-        System.out.println(newM.toString());
+        //System.out.println(newM.toString()); //Line for testing
         return newM;
     } // End of acceptMatrix
+
+
+    /**
+     * acceptTwoMatrices is used for calculations that require at least two
+     * matrices to execute
+     *
+     * acceptTwoMatrices relies heavily on acceptMatrix()'s implementation
+     *
+     * @param in Scanner object to use to accept user input
+     */
+    private void acceptTwoMatrice(Scanner in){
+
+        // Total matrices to grab
+        int maxMatrices = 2;
+
+        for(int i = 0; i < maxMatrices; i++){
+            // Call acceptMatrix to get the first matrix
+            MatrixModel matrix = acceptMatrix(in);
+
+            // If user did not ask to use the previous answer,
+            // add the new Matrix to the matrices Queue in CalculationsModel
+            if(matrix != null){
+                this.model.addMatrix(new MatrixModel(matrix));
+            }
+        }
+    } // End of acceptTwoMatrices
 
 
     /**
@@ -143,7 +193,8 @@ public class Controller {
     private boolean commandHandle(Keyword kw, Scanner in){
         switch(kw){
             case ADD:
-                acceptMatrix(in);
+                acceptTwoMatrice(in);
+                this.model.add();
                 break;
             case SMULT:
                 System.out.print("Please enter a scalar: ");
