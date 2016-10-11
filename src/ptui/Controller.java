@@ -57,6 +57,7 @@ public class Controller {
         System.out.println("ans(ans)\t|\tUse the previous answer in the calculation");
         System.out.println("display(d)\t|\tDisplay the previous answer");
         System.out.println("help(h)\t\t|\tDisplay this help message");
+        System.out.println("clear(c)\t\t|\tClears the previous answer and currently inputted matrices");
         System.out.println("quit(q)\t\t|\tExit the program");
         System.out.println(""); // Separation line
     } // End of helpCmd
@@ -67,30 +68,53 @@ public class Controller {
      * Exits program
      */
     private void quit(){
+        System.out.printf("Good-bye.");
         System.exit(-1);
     }
 
+
+    /**
+     * Appropriately calls handles keywords
+     * Calls method(s) to accept matrices (or a matrix) to execute
+     * calculations on.
+     * @param kw A Keyword to handle
+     * @param in Current scanner object being used to take in input
+     * @return true if calculation successful; false otherwise
+     */
+    private boolean commandHandle(Keyword kw, Scanner in){
+        switch(kw){
+            case SMULT:
+                System.out.print("Please enter a scalar: ");
+                int scalar = Integer.parseInt(in.nextLine().trim());
+                //TODO: Accept a matrix
+            case HELP:
+                helpCmd();
+                break;
+            case QUIT:
+                quit();
+                break; // Unnecessary, but here out of habit
+            default:
+                return false;
+        }
+        return true;
+    } // End of command handle
 
     /**
      * Runs interactive mode and calls appropriate functions in model
      */
     public void run() {
         // Manually creating a matrix to test MatrixModel
-        /*int[] dims = {2,2};
-        MatrixModel mmodel = new MatrixModel(dims);
-        mmodel.insert(1.0, 0, 0);
-        mmodel.insert(2.0, 0, 1);
-        mmodel.insert(3.0, 1, 0);
-        mmodel.insert(4.0, 1, 1);
-        System.out.println(mmodel.toString());
-
-        double[][] identity = mmodel.getTranspose();
-        System.out.println(identity);*/
         startMsg();
-        /*Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
+        String currLine = "";
 
+        // Loop Until user enters Quit(q) command
+        while((currLine = in.nextLine().trim()) != null){
+            Keyword kw = Keyword.getKeyword(currLine);
+            commandHandle(kw, in);
+        }
 
-        in.close();*/
+        in.close();
     }
 
 } // End of Controller class

@@ -27,7 +27,7 @@ package ptui;
 enum Keyword {
 
     ADD("A"), SMULT("SM"), MULT("M"), SUB("S"), INVERSE("INV"), TRANSPOSE("T"), REF("REF"), RREF("RREF"),
-    ANS("ANS"), DISPLAY("D"), HELP("H"), QUIT("Q"), UNKNOWN("U");
+    ANS("ANS"), DISPLAY("D"), HELP("H"), CLEAR("C"), QUIT("Q"), UNKNOWN("U");
 
     // The corresponding shorthand command of a given keyword
     String shorthand;
@@ -61,6 +61,7 @@ enum Keyword {
             case ANS: return "ANSWER";
             case DISPLAY: return "DISPLAY";
             case HELP: return "HELP";
+            case CLEAR: return "CLEAR";
             case QUIT: return "QUIT";
             default: return "UNKNOWN";
         }
@@ -83,6 +84,7 @@ enum Keyword {
             case "ANS": return ANS;
             case "D": return DISPLAY;
             case "H": return HELP;
+            case "C": return CLEAR;
             case "Q": return QUIT;
             default: return UNKNOWN;
         }
