@@ -221,7 +221,39 @@ public class CalculationsModel extends Observable {
      *               matrix
      */
     public void smult(double scalar){
-        //TODO
+        // First, extract a matrix from Queue
+        MatrixModel m = this.matrices.poll();
+
+        // Extracting dimensions
+        int totalRows = m.getDims()[0];
+        int totalCols = m.getDims()[1];
+        int totalElements = totalRows * totalCols;
+
+        // Initialized answer
+        this.answer = Optional.of(new MatrixModel(m.getDims()));
+
+        // Iterate Based on number of elements in matrix
+        for(int i = 0; i < totalElements; i++){
+            int row = (int)(Math.floor(i/totalRows));
+            int col = (int)(i%totalCols);
+
+            // Adjusting row and columns based on the number of rows
+            // compared to total columns
+            if(totalRows < totalCols){
+                if((i != 0) && (i%totalRows == 0)){
+                    row--;
+                }
+            }else if(totalRows > totalCols){
+                row = (int)(Math.floor(i/totalCols));
+            }
+
+            // Multiply the value at (row, col) by the scalar quantity
+            double product = scalar * m.valueAt(row, col);
+            if(this.answer.isPresent()){
+                this.answer.get().insert(product, row, col);
+            }
+        }
+
         announceChange();
     } // End of smult
 
@@ -273,7 +305,9 @@ public class CalculationsModel extends Observable {
             // Iterating columns based on the second matrix
             for(int c = 0; c < m2.getDims()[1]; c++){
                 double product = dotProd(m1.rowAt(r), m2.colAt(c));
-                this.answer.get().insert(product, r, c);
+                if(this.answer.isPresent()){
+                    this.answer.get().insert(product, r, c);
+                }
             }
         }
 
@@ -322,8 +356,9 @@ public class CalculationsModel extends Observable {
             // Add the values at (row,col) in both matrices then insert into
             // answer.
             double diff = m1.valueAt(row, col) - m2.valueAt(row, col);
-            this.answer.get().insert(diff, row, col);
-
+            if(this.answer.isPresent()){
+                this.answer.get().insert(diff, row, col);
+            }
         }
 
         announceChange();

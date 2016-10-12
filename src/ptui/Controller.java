@@ -212,8 +212,14 @@ public class Controller {
                 break;
             case SMULT:
                 System.out.print("Please enter a scalar: ");
-                int scalar = Integer.parseInt(in.nextLine().trim());
-                //TODO: Accept a matrix
+                double scalar = Double.parseDouble(in.nextLine().trim());
+
+                // Accept a single matrix
+                MatrixModel m = acceptMatrix(in);
+                this.model.addMatrix(m);
+                // Scalar Multiply
+                this.model.smult(scalar);
+
                 break;
             case MULT:
                 // Allow user to enter two matrices
