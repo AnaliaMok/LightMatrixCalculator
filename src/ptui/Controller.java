@@ -232,7 +232,8 @@ public class Controller {
                 // TODO
                 break;
             case TRANSPOSE:
-                // TODO
+                acceptMatrix(in);
+                this.model.transpose();
                 break;
             case REF:
                 // TODO: Have to print here maybe
