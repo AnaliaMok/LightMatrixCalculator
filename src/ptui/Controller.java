@@ -193,8 +193,13 @@ public class Controller {
     private boolean commandHandle(Keyword kw, Scanner in){
         switch(kw){
             case ADD:
+                // Allow user to enter two matrices
                 acceptTwoMatrice(in);
-                this.model.add();
+                // Add The Two Specified Matrices - if the dimensions
+                // of the matrices are valid
+                if(this.model.matrixCheck(kw)){
+                    this.model.add();
+                }
                 break;
             case SMULT:
                 System.out.print("Please enter a scalar: ");
@@ -224,7 +229,7 @@ public class Controller {
 
         // Loop Until user enters Quit(q) command
         while((currLine = in.nextLine().trim()) != null){
-            Keyword kw = Keyword.getKeyword(currLine);
+            Keyword kw = Keyword.getKeyword(currLine.toUpperCase());
             commandHandle(kw, in);
         }//*/
 

@@ -19,7 +19,9 @@ public class CalculationsModel extends Observable {
     private Optional<MatrixModel> answer;
 
     /**
-     * A Queue of Matrices to Calculate
+     * A Queue of Matrices to Calculate with.
+     * This queue will only hold two MatrixModel instances at
+     * a time. After each calculation, the matrix should be cleared.
      */
     private Queue<MatrixModel> matrices;
 
@@ -47,18 +49,45 @@ public class CalculationsModel extends Observable {
 
     /**
      * Pre-condition: Keyword kw is a calculation keyword
+     *      The matrices Queue should have a length of two
      * matrixCheck is used to see if the current set of matrices in
      * the Queue is valid for the given calculation
      * @param kw Keyword representing the current calculation
      * @return true if calculation can continue; false otherwise
      */
     public boolean matrixCheck(Keyword kw){
+        // Record a reference to the head of matrices
+        MatrixModel head = this.matrices.poll();
+        MatrixModel curr = new MatrixModel();
+
+        // Create two 2-element integer arrays to compare
+        // after re-assignment
+        int[] dims1 = {head.getDims()[0], head.getDims()[1]};
+        int[] dims2 = new int[2];
+
+        // Loop until the previous head of the queue is back in the front
+        // Should only loop twice
+        while(this.matrices.peek() != head){ // TODO: Fix
+            this.matrices.add(head);
+            curr = this.matrices.poll();
+        }
+
+        // Assign values to dims2
+        dims2[0] = head.getDims()[0];
+        dims2[1] = head.getDims()[1];
+        this.matrices.add(head);
+
+        // Now Compare Dimensions Based on the kw argument
         switch(kw){
             case ADD:
             case SUB:
-                //TODO: Look through the queue while also placing the
-                //TODO: matrices back into the queue
-                break;
+                if(this.hasSameDims(dims1, dims2)){
+                    return true;
+                }else{
+                    // Added an "ED" so that the message is ADDED or SUBTRACTED
+                    System.out.printf("Usage: Matrices with different dimensions cannot %sED\n",
+                            kw.toString());
+                }
             case MULT:
                 //TODO: Check inner dimensions
                 break;
@@ -118,14 +147,52 @@ public class CalculationsModel extends Observable {
     /* CALCULATION METHODS */
 
     /**
-     * Pre-condition: Matrices have the same dimensions
+     * Pre-condition: Matrices have the same dimensions.
+     *      matrices Queue IS NOT empty
      * Post-condition: answer now holds a MatrixModel object
      *      representing a sum
      * Adds two matrices dequeued from the matrices Queue
      *
      */
     public void add(){
-        //TODO
+        // Grab first two matrices from Queue
+        MatrixModel m1 = this.matrices.poll();
+        MatrixModel m2 = this.matrices.poll();
+
+        // Grabbing the total rows & total columns
+        int totRows = m1.getDims()[0];
+        int totCols = m1.getDims()[1];
+
+        // Finding the total number of elements that will be reviewed
+        // Given that the dimensions should be the same, both m1 & m2
+        // will have the same number of elements
+        int totalElements = totRows*totCols;
+
+        // Initializing MatrixModel answer
+        this.answer = Optional.of(new MatrixModel(m1.getDims()));
+
+        // Now Index through and add elements to answer
+        for(int i = 0; i < totalElements; i++){
+            int row = (int)(Math.floor(i/totRows));
+            int col = (int)(i%totCols);
+
+            // Adjusting row and columns based on the number of rows
+            // compared to total columns
+            if(totRows < totCols){
+                if(i%totRows == 0){
+                    row--;
+                }
+            }else if(totRows > totCols){
+                row = (int)(Math.floor(i/totCols));
+            }
+
+            // Add the values at (row,col) in both matrices then insert into
+            // answer.
+            double sum = m1.valueAt(row, col) + m2.valueAt(row, col);
+            this.answer.get().insert(sum, row, col);
+
+        }
+
         announceChange();
     } // End of add
 
