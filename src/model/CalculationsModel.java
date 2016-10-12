@@ -57,21 +57,31 @@ public class CalculationsModel extends Observable {
      */
     public boolean matrixCheck(Keyword kw){
         // Record a reference to the head of matrices
-        MatrixModel head = this.matrices.poll();
-        //MatrixModel curr = new MatrixModel();
+        MatrixModel head = this.matrices.peek();
 
         // Create two 2-element integer arrays to compare
         // after re-assignment
         int[] dims1 = {head.getDims()[0], head.getDims()[1]};
-        //int[] dims2 = new int[2];
+        int[] dims2 = new int[2];
 
-        // Enqueue head back to the matrices queue
-        // Extract and assign the dimensions of the current front
-        // of the queue. Remove this current front and enqueue back to queue
-        this.matrices.add(head);
-        head = this.matrices.poll();
-        int[] dims2 = {head.getDims()[0],head.getDims()[1]};
-        this.matrices.add(head);
+        // If kw corresponds to a calculation requiring more than one
+        // matrix, then execute the following code block
+        // Else, just look at the head of the Queue
+        if(kw != Keyword.INVERSE && kw != Keyword.REF &&
+                kw != Keyword.RREF && kw != Keyword.TRANSPOSE){
+
+            // Remove front
+            head = this.matrices.poll();
+
+            // Enqueue head back to the matrices queue
+            // Extract the current front & assign values to dims2
+            // Remove this current front and enqueue again
+            this.matrices.add(head);
+            head = this.matrices.poll();
+            dims2[0] = head.getDims()[0];
+            dims2[1] = head.getDims()[1];
+            this.matrices.add(head);
+        }
 
         // Now Compare Dimensions Based on the kw argument
         switch(kw){
@@ -86,15 +96,24 @@ public class CalculationsModel extends Observable {
                     return false;
                 }
             case MULT:
-                //TODO: Check inner dimensions
-                break;
+                // Are the number of columns of matrix one equal
+                // to the number of rows in matrix two?
+                if(dims1[1] != dims2[0]){
+                    System.out.println("Usage: Matrices with different inner dimensions cannot be MULTIPLIED");
+                    return false;
+                }
+                return true;
             case INVERSE:
-                //TODO: Check to see if front is a square matrix
-                break;
+                // Is this matrix square?
+                if(dims1[0] != dims1[1]){
+                    System.out.println("Usage: Only square matrices are INVERTIBLE");
+                    return false;
+                }
+                return true;
             default:
                 return true;
         }
-        return true; // Will never be reached, but here to make Java happu
+
     } // End of matrixCheck
 
 
@@ -216,7 +235,15 @@ public class CalculationsModel extends Observable {
      * @return A double representing the dot product of v1 & v2
      */
     private double dotProd(double[] v1, double[] v2){
-        return 0.0;
+        double result = 0.0;
+
+        // The length of v1 and v2 should be the same length
+        // so it doesn't matter which I increment to
+        for(int i = 0; i < v1.length; i++){
+            result += (v1[i] * v2[i]);
+        }
+
+        return result;
     } // End of dotProd
 
 
@@ -228,7 +255,28 @@ public class CalculationsModel extends Observable {
      * Multiplies two matrices dequeued from the matrices Queue
      */
     public void multiply(){
-        //TODO
+        // Grab first two matrices from Queue
+        MatrixModel m1 = this.matrices.poll();
+        MatrixModel m2 = this.matrices.poll();
+
+        // The resulting matrix will have dimensions where the the # of rows
+        // are equal to the 1st matrix's # of rows & the # of columns will
+        // equal the number of columns of the 2nd matrix.
+        int[] ansDims = {m1.getDims()[0], m2.getDims()[1]};
+        this.answer = Optional.of(new MatrixModel(ansDims));
+
+        // Dot product each row vector in m1 with each
+        // column in m2
+
+        // Iterating rows based on the first matrix
+        for(int r = 0; r < m1.getDims()[0]; r++){
+            // Iterating columns based on the second matrix
+            for(int c = 0; c < m2.getDims()[1]; c++){
+                double product = dotProd(m1.rowAt(r), m2.colAt(c));
+                this.answer.get().insert(product, r, c);
+            }
+        }
+
         announceChange();
     } // End of multiply
 
@@ -290,7 +338,7 @@ public class CalculationsModel extends Observable {
      * matrices Queue
      */
     public void inverse(){
-        //TODO
+        //TODO: Need to implement RREF first
         announceChange();
     } // End of inverse
 
@@ -302,7 +350,7 @@ public class CalculationsModel extends Observable {
      * front of the queue and assign the retrieved matrix to answer
      */
     public void transpose(){
-        //TODO
+        //TODO: Deep Copy a matrix's transpose to answer
         announceChange();
     } // End of transpose
 
@@ -313,7 +361,7 @@ public class CalculationsModel extends Observable {
      * Row reduces the current matrix to Row Echelon Form(REF)
      */
     public void toREF(MatrixModel m){
-        //TODO
+        //TODO: Need to implement multiplication first
     } // End of toREF
 
 
@@ -325,7 +373,7 @@ public class CalculationsModel extends Observable {
      * @return rref matrix
      */
     public void toRREF(MatrixModel m){
-        //TODO
+        //TODO: Need to implement multiplication & toREF first
     } // End of toRREF
 
 

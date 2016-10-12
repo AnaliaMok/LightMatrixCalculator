@@ -100,6 +100,45 @@ public class MatrixModel {
         return this.matrix[row][col];
     } // End of valueAt
 
+
+    /**
+     * colAt retrieves and returns the values at the specified column
+     * @param col An Integer representing what column to retrieve
+     * @return A double array
+     */
+    public double[] colAt(int col){
+        // NOTE: The number of elements in a column are equal to the number
+        // of rows in a matrix
+        double[] result = new double[this.dims[0]];
+
+        // Retrieving values at column col
+        for(int r = 0; r < this.dims[0]; r++){
+            result[r] = this.matrix[r][col];
+        }
+
+        return result;
+    } // End of colAt
+
+
+    /**
+     * rowAt retrieves and returns the values at the specified row
+     * @param row An Integer representing what row to retrieve
+     * @return A double array
+     */
+    public double[] rowAt(int row){
+        // NOTE: The number of elements in a row are equals to the number of
+        // columns in a matrix
+        double[] result = new double[this.dims[1]];
+
+        // Retrieving values at row row
+        for(int c = 0; c < this.dims[1]; c++){
+            result[c] = this.matrix[row][c];
+        }
+
+        return result;
+    } // End of rowAt
+
+
     /**
      * Getter method for the MatrixModel's dimensions
      * @return this.dims: An array of two integers

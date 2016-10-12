@@ -201,10 +201,46 @@ public class Controller {
                     this.model.add();
                 }
                 break;
+            case SUB:
+                // Allow user to enter two matrices
+                acceptTwoMatrice(in);
+                // Add The Two Specified Matrices - if the dimensions
+                // of the matrices are valid
+                if(this.model.matrixCheck(kw)){
+                    this.model.subtract();
+                }
+                break;
             case SMULT:
                 System.out.print("Please enter a scalar: ");
                 int scalar = Integer.parseInt(in.nextLine().trim());
                 //TODO: Accept a matrix
+                break;
+            case MULT:
+                // Allow user to enter two matrices
+                acceptTwoMatrice(in);
+                if(this.model.matrixCheck(kw)){
+                    this.model.multiply();
+                }
+                break;
+            case INVERSE:
+                // TODO
+                break;
+            case TRANSPOSE:
+                // TODO
+                break;
+            case REF:
+                // TODO: Have to print here maybe
+                break;
+            case RREF:
+                // TODO
+                break;
+            case DISPLAY:
+                // Display Current answer
+                System.out.println(this.model.display());
+                break;
+            case CLEAR:
+                // Clear currently saved matrices & answer
+                this.model.clear();
                 break;
             case HELP:
                 helpCmd();
