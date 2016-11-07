@@ -388,7 +388,7 @@ public class CalculationsModel extends Observable {
 
         // Remove the front of the queue & retrieve it's transpose
         MatrixModel m = this.matrices.poll();
-        double[][] transpose = m.getTranspose();
+        double[] transpose = m.getTranspose();
 
         // NOTE: Dimensions of a transpose are equal to the swapped
         // dimensions of the its original matrix
@@ -400,22 +400,13 @@ public class CalculationsModel extends Observable {
 
         // Copy values from transpose to answer
         for(int i = 0; i < totalElement; i++){
-            int row = (int)(Math.floor(i/transDims[0]));
-            int col = (int)(i%transDims[1]);
-
-            // Adjusting row and columns based on the number of rows
-            // compared to total columns
-            if(transDims[0] < transDims[1]){
-                if((i != 0) && (i%transDims[0] == 0)){
-                    row--;
-                }
-            }else if(transDims[0] > transDims[1]){
-                row = (int)(Math.floor(i/transDims[1]));
-            }
+            int row = i/transDims[1];
+            int col = i%transDims[1];
+            int transIdx = (row*transDims[1]) + col;
 
             // Insert element at transpose(row,col) into answer(row,col)
             if(this.answer.isPresent()){
-                this.answer.get().insert(transpose[row][col], row, col);
+                this.answer.get().insert(transpose[transIdx], row, col);
             }
         }
 

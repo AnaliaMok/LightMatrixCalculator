@@ -18,28 +18,22 @@ public class MatrixModel {
     /**
      * The underlying representation of a matrix is a 2D array
      */
-    private double[][] matrix;
+    private double[] matrix;
 
     /**
      * The inverse of the current matrix
      */
-    private double[][] inverse;
+    private double[] inverse;
 
     /**
      * The identity matrix of current matrix
      */
-    private int[][] identity;
+    private int[] identity;
 
     /**
      * The transpose of the current matrix
      */
-    private double[][]transpose;
-
-
-    /**
-     * Empty Constructor
-     */
-    public MatrixModel(){}
+    private double[]transpose;
 
     /**
      * Main Constructor of Matrix
@@ -48,7 +42,7 @@ public class MatrixModel {
      *             of this matrix
      */
     public MatrixModel(int dims[]){
-        this.matrix = new double[dims[0]][dims[1]];
+        this.matrix = new double[dims[0]*dims[1]];
         this.dims = new int[2];
         this.dims[0] = dims[0];
         this.dims[1] = dims[1];
@@ -66,18 +60,20 @@ public class MatrixModel {
         this.dims[0] = m.getDims()[0];
         this.dims[1]= m.getDims()[1];
 
+        // TODO: Redo Implementation So that Internally a
+        // matrix a single array
+
         // Initializing & Defining Matrix
-        this.matrix = new double[this.dims[0]][this.dims[1]];
-        for(int r = 0; r < this.dims[0]; r++){
-            for(int c = 0; c < this.dims[1]; c++){
-                this.matrix[r][c] = m.valueAt(r, c);
-            }
+        this.matrix = new double[this.dims[0]*this.dims[1]];
+        for(int i = 0; i < (this.dims[0]*this.dims[1]); i++){
+
         }
 
     } // End of copy constructor
 
 
     /**
+     * Pre-condition: Row and column are zero-based
      * Used to insert values into the matrix (or replace
      * if necessary)
      *
@@ -86,18 +82,21 @@ public class MatrixModel {
      * @param col the column to place the value in
      */
     public void insert(double value, int row, int col){
-        this.matrix[row][col] = value;
+        // Current Index = currRow * totalColumns + currColumns
+        int currIdx = (row * this.dims[1]) + col;
+        this.matrix[currIdx] = value;
     } // End of insert()
 
 
     /**
      * Pre-condition: Matrix has been instantiated
+     *      Values are 0-based
      * @param row An integer representing the row to find a value
      * @param col An integer representing the column to find a value
      * @return A double representing the value at (row,col)
      */
     public double valueAt(int row, int col){
-        return this.matrix[row][col];
+        return this.matrix[(row*this.dims[1])+col];
     } // End of valueAt
 
 
@@ -109,14 +108,15 @@ public class MatrixModel {
     public double[] colAt(int col){
         // NOTE: The number of elements in a column are equal to the number
         // of rows in a matrix
-        double[] result = new double[this.dims[0]];
+        double[] column = new double[this.dims[0]];
 
         // Retrieving values at column col
         for(int r = 0; r < this.dims[0]; r++){
-            result[r] = this.matrix[r][col];
+            int currIdx = (r * this.dims[1] + col);
+            column[r] = this.matrix[currIdx];
         }
 
-        return result;
+        return column;
     } // End of colAt
 
 
@@ -132,7 +132,8 @@ public class MatrixModel {
 
         // Retrieving values at row row
         for(int c = 0; c < this.dims[1]; c++){
-            result[c] = this.matrix[row][c];
+            int currIdx = (row * this.dims[1] + c);
+            result[c] = this.matrix[currIdx];
         }
 
         return result;
@@ -154,7 +155,7 @@ public class MatrixModel {
      * already
      * @return identity Matrix
      */
-    public int[][] getIdentity(){
+    public int[] getIdentity(){
         if(this.identity == null){
             makeIdentity();
         }
@@ -168,18 +169,21 @@ public class MatrixModel {
      *      The current matrix is a square matrix
      * Post-condition:
      *      The identity matrix will be initialized and each diagonal
-     *      entry will be a one
+     *      entry will be a one. All remaining entries will be a one
      * Will initialize the identity matrix
      * Will set all diagonal entries to one
      */
     private void makeIdentity(){
 
         // Initializing identity matrix
-        this.identity = new int[this.dims[0]][this.dims[1]];
+        this.identity = new int[this.dims[0]*this.dims[1]];
 
-        // Iterate Up to the Either the number of rows or columns
-        for(int i = 0; i < this.dims[0]; i++){
-            this.identity[i][i] = 1;
+        // Iterate Based on the Number of Rows
+        for(int row = 0; row < this.dims[0]; row++){
+            // Current Index = currRow * totalColumns + currCol
+            // (which is equal to the currRow)
+            int currIdx = (row * this.dims[1]) + row;
+            this.identity[currIdx] = 1;
         }
     } // End of makeIdentity
 
@@ -193,7 +197,7 @@ public class MatrixModel {
      *
      * @return inverse Matrix
      */
-    public double[][] getInverse(){
+    public double[] getInverse(){
         if(this.inverse == null){
             findInverse();
         }
@@ -207,7 +211,7 @@ public class MatrixModel {
      */
     private void findInverse(){
         // Initializing inverse matrix
-        this.inverse = new double[this.dims[0]][this.dims[1]];
+        this.inverse = new double[this.dims[0]*this.dims[1]];
         //TODO: Need to implement methods in CalculationsModel
 
     } // End of inverse
@@ -218,7 +222,7 @@ public class MatrixModel {
      * Will initialize the transpose field - if it hasn't already
      * @return the transpose field
      */
-    public double[][] getTranspose(){
+    public double[] getTranspose(){
         if(this.transpose == null){
             findTranspose();
         }
@@ -235,14 +239,13 @@ public class MatrixModel {
     private void findTranspose(){
         // Initializing transpose
         // NOTE: The dimensions of the rows & columns are reversed
-        this.transpose = new double[this.dims[1]][this.dims[0]];
+        this.transpose = new double[this.dims[1]*this.dims[0]];
 
-        //Occupying transpose
-        //Iterating as if the matrix was a one dimensional array
-        for(int r = 0; r < (this.dims[0]*this.dims[1]); r++){
-            for(int c = 0; c < this.dims[1]; c++) {
-                this.transpose[c][r] = this.matrix[r][c];
-            }
+        for(int i = 0; i < this.dims[1]*this.dims[0]; i++){
+            int row = i / this.dims[1];
+            int col = i % this.dims[1];
+            int transIdx = (col * this.dims[1]) + row;
+            transpose[transIdx] = this.matrix[i];
         }
 
     } // End of transpose
@@ -253,27 +256,16 @@ public class MatrixModel {
         String result = "";
 
         // Iterating through the matrix as if it were a one dimensional array
-        for(int r = 0; r < this.dims[0]; r++){
-            for(int c = 0; c < this.dims[1]; c++) {
-
-                // Adding the left vertical bar of the line
-                if (c == 0) {
-                    result += "|\t";
-                    // Adding the current value in matrix to result String
-                    result += Double.toString(this.matrix[r][c]) + "\t";
-                    continue;
-                }
-
-                // Adding the right vertical bar and ending new line character
-                if (c == this.dims[1] - 1) {
-                    result += Double.toString(this.matrix[r][c]) + "\t" + "|\n";
-                    continue;
-                }
-
-                // If somewhere in the middle of a row, just add the
-                // value to the result String + a tab character
-                result += Double.toString(this.matrix[r][c]) + "\t";
+        for(int i = 0; i < this.dims[0]+this.dims[1]; i++){
+            // Calculating Current Column
+            int col = i % this.dims[1];
+            if(col == this.dims[1]-1){
+                result += Double.toString(this.matrix[i]) + "\n";
+                continue;
             }
+
+            result += Double.toString(this.matrix[i]) + "\t";
+
         }
 
         return result;
