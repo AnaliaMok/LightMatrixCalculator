@@ -189,18 +189,8 @@ public class CalculationsModel extends Observable {
 
         // Now Index through and add elements to answer
         for(int i = 0; i < totalElements; i++){
-            int row = (int)(Math.floor(i/totRows));
-            int col = (int)(i%totCols);
-
-            // Adjusting row and columns based on the number of rows
-            // compared to total columns
-            if(totRows < totCols){
-                if((i != 0) && (i%totRows == 0)){
-                    row--;
-                }
-            }else if(totRows > totCols){
-                row = (int)(Math.floor(i/totCols));
-            }
+            int row = i / totCols;
+            int col = i % totCols;
 
             // Add the values at (row,col) in both matrices then insert into
             // answer.
@@ -234,18 +224,8 @@ public class CalculationsModel extends Observable {
 
         // Iterate Based on number of elements in matrix
         for(int i = 0; i < totalElements; i++){
-            int row = (int)(Math.floor(i/totalRows));
-            int col = (int)(i%totalCols);
-
-            // Adjusting row and columns based on the number of rows
-            // compared to total columns
-            if(totalRows < totalCols){
-                if((i != 0) && (i%totalRows == 0)){
-                    row--;
-                }
-            }else if(totalRows > totalCols){
-                row = (int)(Math.floor(i/totalCols));
-            }
+            int row = i / totalCols;
+            int col = i % totalCols;
 
             // Multiply the value at (row, col) by the scalar quantity
             double product = scalar * m.valueAt(row, col);
@@ -340,18 +320,8 @@ public class CalculationsModel extends Observable {
 
         // Now Index through and add elements to answer
         for(int i = 0; i < totalElements; i++){
-            int row = (int)(Math.floor(i/totRows));
-            int col = (int)(i%totCols);
-
-            // Adjusting row and columns based on the number of rows
-            // compared to total columns
-            if(totRows < totCols){
-                if((i != 0) && (i%totRows == 0)){
-                    row--;
-                }
-            }else if(totRows > totCols){
-                row = (int)(Math.floor(i/totCols));
-            }
+            int row = i / totCols;
+            int col = i % totCols;
 
             // Add the values at (row,col) in both matrices then insert into
             // answer.
