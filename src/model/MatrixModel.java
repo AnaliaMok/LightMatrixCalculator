@@ -1,7 +1,10 @@
 package model;
+import java.util.ArrayList;
 
 /**
- * Representation of an m x n matrix
+ * Representation of a m x n matrix - That can only contain
+ * numbers - not Strings. Chars can be passed in, but will
+ * be converted to their corresponding ASCII decimal values
  * Includes its dimensions, its inverse - when necessary
  * and its identity matrix - when necessary
  *
@@ -16,24 +19,27 @@ public class MatrixModel {
     private int[] dims;
 
     /**
-     * The underlying representation of a matrix is a 2D array
+     * The underlying representation of a single matrix
+     * is an ArrayList of Numbers
+     * Using the Number Class to avoid a Generic Class Declaration
+     * and restrict to only Matrices of type Number - and not String
      */
-    private double[] matrix;
+    private ArrayList<Number> matrix;
 
     /**
      * The inverse of the current matrix
      */
-    private double[] inverse;
+    private ArrayList<Number> inverse;
 
     /**
      * The identity matrix of current matrix
      */
-    private int[] identity;
+    private ArrayList<Number> identity;
 
     /**
      * The transpose of the current matrix
      */
-    private double[]transpose;
+    private ArrayList<Number> transpose;
 
     /**
      * Main Constructor of Matrix
@@ -42,7 +48,11 @@ public class MatrixModel {
      *             of this matrix
      */
     public MatrixModel(int dims[]){
-        this.matrix = new double[dims[0]*dims[1]];
+        // Initial capacity set to total number of values possible
+        // with the given dimensions
+        this.matrix = new ArrayList<Number>(dims[0]*dims[1]);
+
+        // Copying Over Dimensions
         this.dims = new int[2];
         this.dims[0] = dims[0];
         this.dims[1] = dims[1];
@@ -50,7 +60,7 @@ public class MatrixModel {
 
 
     /**
-     * A copy constructor that instantiates a MatrixModel object
+     * A Copy Constructor that instantiates a MatrixModel object
      * based on the given MatrixModel m
      * @param m A MatrixModel to deep copy
      */
@@ -60,14 +70,9 @@ public class MatrixModel {
         this.dims[0] = m.getDims()[0];
         this.dims[1]= m.getDims()[1];
 
-        // TODO: Redo Implementation So that Internally a
-        // matrix a single array
-
-        // Initializing & Defining Matrix
-        this.matrix = new double[this.dims[0]*this.dims[1]];
-        for(int i = 0; i < (this.dims[0]*this.dims[1]); i++){
-
-        }
+        // Initializing Current Matrix
+        this.matrix = new ArrayList<Number>(this.dims[0]*this.dims[1]);
+        this.matrix.addAll(m.getMatrix());
 
     } // End of copy constructor
 
@@ -147,6 +152,16 @@ public class MatrixModel {
     public int[] getDims(){
         return this.dims;
     } // End of getDims
+
+
+    /**
+     * Getter method to retrieve the matrix's internals
+     * Only to be accessed by the Model package classes
+     * @return An ArrayList of Numbers
+     */
+    protected ArrayList<Number> getMatrix(){
+        return this.matrix;
+    } // End of getMatrix
 
 
     /**
