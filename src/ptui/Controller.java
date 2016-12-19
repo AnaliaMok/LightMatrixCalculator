@@ -232,7 +232,7 @@ public class Controller {
                 // TODO
                 break;
             case TRANSPOSE:
-                acceptMatrix(in);
+                this.model.addMatrix(acceptMatrix(in));
                 this.model.transpose();
                 break;
             case REF:
@@ -256,6 +256,7 @@ public class Controller {
                 quit();
                 break; // Unnecessary, but here out of habit
             default:
+                System.out.println("USAGE: Unknown Command Given");
                 return false;
         }
         return true;
@@ -274,9 +275,10 @@ public class Controller {
         while((currLine = in.nextLine().trim()) != null){
             Keyword kw = Keyword.getKeyword(currLine.toUpperCase());
             commandHandle(kw, in);
-        }//*/
+        }
 
         in.close();
+
     }
 
 } // End of Controller class

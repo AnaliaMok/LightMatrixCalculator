@@ -103,7 +103,11 @@ public enum Keyword {
 
         // In case s is not a shorthand, convert the String with default valueOf method
         if(key == UNKNOWN){
-            key = Keyword.valueOf(s); // If key was unknown to begin with, then this is just an extraneous step
+            try {
+                key = Keyword.valueOf(s); // If key was unknown to begin with, then this is just an extraneous step
+            }catch(IllegalArgumentException iae){
+                key = UNKNOWN;
+            }
         }
         return key;
     } // End of getKeyword

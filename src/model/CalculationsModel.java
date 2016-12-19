@@ -1,9 +1,13 @@
 package model;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.ArrayList;
+import java.util.function.BiFunction;
+
 
 /**
  * Implementation of Most Possible Matrix Calculations
@@ -194,7 +198,9 @@ public class CalculationsModel extends Observable {
 
             // Add the values at (row,col) in both matrices then insert into
             // answer.
-            double sum = m1.valueAt(row, col) + m2.valueAt(row, col);
+            Number m1Val = m1.valueAt(row, col);
+            Number m2Val = m2.valueAt(row, col);
+            Number sum = new BigDecimal(m1Val.toString()).add(new BigDecimal(m2Val.toString()));
             this.answer.get().insert(sum, row, col);
 
         }
@@ -228,7 +234,9 @@ public class CalculationsModel extends Observable {
             int col = i % totalCols;
 
             // Multiply the value at (row, col) by the scalar quantity
-            double product = scalar * m.valueAt(row, col);
+            BigDecimal scale = new BigDecimal(scalar);
+            //double product = scalar * m.valueAt(row, col);
+            Number product = new BigDecimal(m.valueAt(row, col).toString()).multiply(scale);
             if(this.answer.isPresent()){
                 this.answer.get().insert(product, row, col);
             }
@@ -246,13 +254,15 @@ public class CalculationsModel extends Observable {
      * @param v2 A vector/double array
      * @return A double representing the dot product of v1 & v2
      */
-    private double dotProd(double[] v1, double[] v2){
-        double result = 0.0;
+    private Number dotProd(ArrayList<Number> v1, ArrayList<Number> v2){
+        Number result = 0;
 
         // The length of v1 and v2 should be the same length
         // so it doesn't matter which I increment to
-        for(int i = 0; i < v1.length; i++){
-            result += (v1[i] * v2[i]);
+        for(int i = 0; i < v1.size(); i++){
+            BigDecimal v1Val = new BigDecimal(v1.get(i).toString());
+            BigDecimal v2Val = new BigDecimal(v2.get(i).toString());
+            result = new BigDecimal(result.toString()).add(v1Val.multiply(v2Val));
         }
 
         return result;
@@ -284,7 +294,7 @@ public class CalculationsModel extends Observable {
         for(int r = 0; r < m1.getDims()[0]; r++){
             // Iterating columns based on the second matrix
             for(int c = 0; c < m2.getDims()[1]; c++){
-                double product = dotProd(m1.rowAt(r), m2.colAt(c));
+                Number product = dotProd(m1.rowAt(r), m2.colAt(c));
                 if(this.answer.isPresent()){
                     this.answer.get().insert(product, r, c);
                 }
@@ -325,7 +335,10 @@ public class CalculationsModel extends Observable {
 
             // Add the values at (row,col) in both matrices then insert into
             // answer.
-            double diff = m1.valueAt(row, col) - m2.valueAt(row, col);
+            Number m1Val = m1.valueAt(row, col);
+            Number m2Val = m2.valueAt(row, col);
+
+            Number diff = new BigDecimal(m1Val.toString()).subtract(new BigDecimal(m2Val.toString()));
             if(this.answer.isPresent()){
                 this.answer.get().insert(diff, row, col);
             }
@@ -358,7 +371,7 @@ public class CalculationsModel extends Observable {
 
         // Remove the front of the queue & retrieve it's transpose
         MatrixModel m = this.matrices.poll();
-        double[] transpose = m.getTranspose();
+        ArrayList<Number> transpose = m.getTranspose();
 
         // NOTE: Dimensions of a transpose are equal to the swapped
         // dimensions of the its original matrix
@@ -376,7 +389,7 @@ public class CalculationsModel extends Observable {
 
             // Insert element at transpose(row,col) into answer(row,col)
             if(this.answer.isPresent()){
-                this.answer.get().insert(transpose[transIdx], row, col);
+                this.answer.get().insert(transpose.get(transIdx), row, col);
             }
         }
 
