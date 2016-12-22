@@ -1,6 +1,7 @@
 package model;
 import java.util.ArrayList;
 
+
 /**
  * Representation of a m x n matrix - That can only contain
  * numbers - not Strings. Chars can be passed in, but will
@@ -245,13 +246,58 @@ public class MatrixModel {
 
 
     /**
+     * Pre-condition: Current matrix is not 2x2.
+     *      - row and col are 0-based
+     *
+     * getMinorMatrix - returns the (row, col)-minor matrix of
+     *      this MatrixModel instance. The (row,col)-minor matrix
+     *      is the current MatrixModel's internal matrix, but without
+     *      the (row)th row and the (col)th column.
+     *
+     * @param row The current row (row to remove)
+     * @param col The current column (column to remove)
+     * @return A MatrixModel without the (row)th row and the (col)th oolumn
+     */
+    protected MatrixModel getMinorMatrix(int row, int col){
+
+        // Creating new matrix with one less row and column
+        int[] newDims = {this.dims[0]-1, this.dims[1]-1};
+        MatrixModel minor = new MatrixModel(newDims);
+
+        // Current Row and columns of the minor matrix
+        int currMinRow = 0, currMinCol = 0;
+
+        // Adding elements
+        int totalElems = this.dims[0]*this.dims[1];
+        for(int i = 0; i < totalElems; i++){
+            int currRow = i / this.dims[1];
+            int currCol = i % this.dims[1];
+
+            // Skipping All elements in the (row)th row & (col)th column
+            // in this matrix
+            if(currRow == row || currCol == col){
+                continue;
+            }
+
+            if(currMinCol == newDims[1]){
+                currMinCol = 0; // Reset Column Index
+                currMinRow++; // Increment Row Index
+            }
+            minor.insert(this.valueAt(currRow, currCol), currMinRow, currMinCol++);
+
+        }
+
+        return minor;
+    } // End of getMinor Matrix
+
+    /**
      * Pre-condition: the inverse matrix has not been initialized
-     * Creates the inverse matrix through Row Reduction
+     * Creates the inverse matrix through Co-factor expansion
      */
     private void findInverse(){
-        // Initializing inverse matrix
+
+        // Initializing Inverse
         this.inverse = new ArrayList<Number>();
-        //TODO: Need to implement methods in CalculationsModel
 
     } // End of inverse
 

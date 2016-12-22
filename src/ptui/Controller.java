@@ -277,6 +277,10 @@ public class Controller {
             commandHandle(kw, in);
         }
 
+        /*MatrixModel test = acceptMatrix(in);
+
+        System.out.println(CalculationsModel.getDeterminant(test));*/
+
         in.close();
 
     }
