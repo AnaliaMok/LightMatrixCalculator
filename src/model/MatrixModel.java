@@ -1,4 +1,5 @@
 package model;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 
@@ -41,6 +42,11 @@ public class MatrixModel {
      * The transpose of the current matrix
      */
     private ArrayList<Number> transpose;
+
+    /**
+     * The determinant of the current matrix
+     */
+    private Number determinant;
 
     /**
      * Main Constructor of Matrix
@@ -258,7 +264,7 @@ public class MatrixModel {
      * @param col The current column (column to remove)
      * @return A MatrixModel without the (row)th row and the (col)th oolumn
      */
-    protected MatrixModel getMinorMatrix(int row, int col){
+    private MatrixModel getMinorMatrix(int row, int col){
 
         // Creating new matrix with one less row and column
         int[] newDims = {this.dims[0]-1, this.dims[1]-1};
@@ -291,6 +297,77 @@ public class MatrixModel {
     } // End of getMinor Matrix
 
     /**
+     * Pre-Condition: The elements of m are all of type Number
+     * Recursive Function that takes a single matrix and
+     * finds its determinant - which will be used in the inverse function
+     * This method will use co-factor expansion on the first row of the
+     * matrix and will make recursive calls to each matrix that is larger
+     * than a 2x2 matrix.
+     * The determinant of 2x2 matrices can be easily calculated.
+     *
+     * NOTE: This method will be used to in the matrix check
+     *
+     * @param m A MatrixModel to find the determinant of
+     * @return A Number representing the determinant of current matrix
+     */
+    static Number getDeterminant(MatrixModel m){
+        Number determinant = 0;
+
+        // Checking if current matrix is a 2x2 matrix
+        // NOTE: Method is only ever called if Matrix m has
+        // already been deemed invertible. Therefore, only
+        // need to check the value of either the total rows
+        // or total columns
+        //
+        // Formula for a 2x2 Matrix:
+        // | a b |
+        // | c d |
+        // det = ad - bc
+        if(m.getDims()[0] == 2){
+            // If matrix is 2x2, then can assume the positions of elements
+            Number a = m.valueAt(0, 0);
+            Number b = m.valueAt(0, 1);
+            Number c = m.valueAt(1, 0);
+            Number d = m.valueAt(1, 1);
+
+            // Calculating Individual Products for readability sake
+            Number productAD = new BigDecimal(a.toString()).multiply(new BigDecimal(d.toString()));
+            Number productBC = new BigDecimal(b.toString()).multiply(new BigDecimal(c.toString()));
+
+            determinant = new BigDecimal(productAD.toString()).subtract(new BigDecimal(productBC.toString()));
+            return determinant;
+        }else{
+            // NOTE TO SELF: Remember that co-factor expansion formula is one-based
+            // Formula: det(A) = (-1)^(i+j)(aij)(Cij)
+            //      where i = row, j = column, aij = values at (i,j)
+            //          and Cij = the ij minor matrix of m
+
+            // List of ij minor matrices
+            ArrayList<MatrixModel> minors = new ArrayList<MatrixModel>();
+            int totalCols = m.getDims()[1]; // Total Columns = Total Elements Per Row
+            for(int i = 0; i < totalCols; i++){
+                int currRow = i / totalCols;
+                int currCol = i % totalCols;
+
+                Number value = m.valueAt(currRow, currCol);
+
+                // The negative one raised to the sum of the currRow and currCol
+                // (1-based)
+                int negation = (int)Math.pow(-1, ((currRow+1)+(currCol+1)));
+
+                // Equation: determinant += negation * value * det(currRow, currCol minor matrix)
+                determinant = new BigDecimal(determinant.toString())
+                        .add(new BigDecimal(negation)
+                                .multiply(new BigDecimal(value.toString()))
+                                .multiply(new BigDecimal(getDeterminant(m.getMinorMatrix(currRow, currCol)).toString())));
+
+            }
+            return determinant;
+        }
+
+    } // End of getDeterminant
+
+    /**
      * Pre-condition: the inverse matrix has not been initialized
      * Creates the inverse matrix through Co-factor expansion
      */
@@ -298,6 +375,19 @@ public class MatrixModel {
 
         // Initializing Inverse
         this.inverse = new ArrayList<Number>();
+        // Adding All Current Elements in matrix to the inverse
+        // ArrayList
+        this.inverse.addAll(this.matrix);
+
+        // Checking to see if determinant has been calculated before
+        if(this.determinant.doubleValue() == 0){
+            this.determinant = getDeterminant(this);
+        }
+
+        // Reciprocal of determinant
+        Double recip = 1 / this.determinant.doubleValue();
+
+
 
     } // End of inverse
 

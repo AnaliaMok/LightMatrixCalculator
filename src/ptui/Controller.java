@@ -229,7 +229,12 @@ public class Controller {
                 }
                 break;
             case INVERSE:
-                // TODO
+                // Add inputted matrix to the queue of matrices
+                this.model.addMatrix(acceptMatrix(in));
+                // Checking Calculation Validity of inputted matrix
+                if(this.model.matrixCheck(kw)){
+                    this.model.inverse();
+                }
                 break;
             case TRANSPOSE:
                 this.model.addMatrix(acceptMatrix(in));
@@ -271,10 +276,13 @@ public class Controller {
         Scanner in = new Scanner(System.in);
         String currLine = "";
 
+        System.out.print(">  ");
+
         // Loop Until user enters Quit(q) command
         while((currLine = in.nextLine().trim()) != null){
             Keyword kw = Keyword.getKeyword(currLine.toUpperCase());
             commandHandle(kw, in);
+            System.out.print(">  ");
         }
 
         /*MatrixModel test = acceptMatrix(in);
@@ -282,7 +290,7 @@ public class Controller {
         System.out.println(CalculationsModel.getDeterminant(test));*/
 
         in.close();
-
+        System.exit(0);
     }
 
 } // End of Controller class
