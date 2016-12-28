@@ -7,6 +7,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
+ * The Graphical User Interface for the Matrix Calculator
+ * This class is an observer of the CalculationsModel
  * @author Analia Mok
  */
 public class CalculatorGUI extends Application implements Observer{
