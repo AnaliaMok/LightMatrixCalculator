@@ -30,6 +30,7 @@ public class Ptui implements Observer{
     public void update(Observable o, Object arg){
         // Just re-displays the results, for now
         //System.out.println("Result:");
+        System.out.println();
         System.out.println(this.model.display());
     }
 

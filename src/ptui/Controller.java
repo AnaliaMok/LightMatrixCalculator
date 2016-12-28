@@ -58,7 +58,7 @@ public class Controller {
         System.out.println("ans(ans)\t|\tUse the previous answer in the calculation");
         System.out.println("display(d)\t|\tDisplay the previous answer");
         System.out.println("help(h)\t\t|\tDisplay this help message");
-        System.out.println("clear(c)\t\t|\tClears the previous answer and currently inputted matrices");
+        System.out.println("clear(c)\t|\tClears the previous answer and currently inputted matrices");
         System.out.println("quit(q)\t\t|\tExit the program");
         System.out.println(""); // Separation line
     } // End of helpCmd

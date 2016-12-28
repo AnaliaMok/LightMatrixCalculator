@@ -375,19 +375,53 @@ public class MatrixModel {
 
         // Initializing Inverse
         this.inverse = new ArrayList<Number>();
-        // Adding All Current Elements in matrix to the inverse
-        // ArrayList
-        this.inverse.addAll(this.matrix);
 
-        // Checking to see if determinant has been calculated before
-        if(this.determinant.doubleValue() == 0){
-            this.determinant = getDeterminant(this);
+        // Constructing a cofactor matrix
+        MatrixModel cofactors = new MatrixModel(this.dims);
+        int totalCols = this.dims[1];
+        int totalElem = this.dims[0]*totalCols;
+
+        for(int i = 0; i < totalElem; i++){
+            int row = i / totalCols;
+            int col = i % totalCols;
+            // Determinant of row,col-minor matrix
+            Number minorDet = getDeterminant(this.getMinorMatrix(row, col));
+
+            // Cofactor of element at (row, col) =
+            // (-1)^(row+col) * det((row,col)-minor matrix)
+            Number cofactor = new BigDecimal(Math.pow(-1, row+col))
+                    .multiply(new BigDecimal(minorDet.toString()));
+            cofactors.insert(cofactor, row, col);
         }
 
-        // Reciprocal of determinant
-        Double recip = 1 / this.determinant.doubleValue();
+        // Getting determinant of matrix using cofactor expansion
+        BigDecimal det = new BigDecimal(0);
 
+        // Expanding on the first row, so need to iterate based
+        // on total number of columns
 
+        for(int i = 0; i < totalCols; i++){
+            int row = i / totalCols;
+            int col = i % totalCols;
+
+            // Equivalent of : det += this.valueAt(row, col) * cofactors.valueAt(row,col)
+            det = det.add(new BigDecimal(this.valueAt(row, col).toString())
+                    .multiply(new BigDecimal(cofactors.valueAt(row, col).toString())));
+        }
+
+        // Adjugate Matrix = the transpose of the cofactor matrix
+        ArrayList<Number> adjugate = cofactors.getTranspose();
+
+        // Multiplying each element in the adjugate by the reciprocal
+        // of the determinant and assigning this value to the corresponding
+        // location in the inverse "matrix"
+        //BigDecimal detReciprocal = new BigDecimal(1).divide(det);
+        Double detReciprocal = 1/det.doubleValue();
+
+        for(Number n : adjugate){
+            Number val = new BigDecimal(detReciprocal).multiply(new BigDecimal(n.toString()));
+            this.inverse.add(val);
+        }
 
     } // End of inverse
 
@@ -448,13 +482,20 @@ public class MatrixModel {
             int col = i % this.dims[1];
             Number num = this.valueAt(row, col);
 
-            if(col == this.dims[1]-1){
+            if(col == 0){
+                // Tabbing over the entire result so
+                // need to add a tab character at the beginning
+                // of each line
+                result += "|\t";
+            }
 
-                result += "" + num + "\n";
+            if(col == this.dims[1]-1){
+                // Need to start new line
+                result += "" + String.format("%.4f", num) + "\t|\n";
                 continue;
             }
 
-            result += "" + num + "\t";
+            result += "" + String.format("%.4f", num) + "\t";
 
         }
 
