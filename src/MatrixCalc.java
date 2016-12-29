@@ -1,3 +1,5 @@
+import gui.CalculatorGUI;
+import javafx.application.Application;
 import ptui.Controller;
 import ptui.Ptui;
 
@@ -40,6 +42,7 @@ public class MatrixCalc {
                     ctrl.run();
                     break;
                 case GUI:
+                    Application.launch(CalculatorGUI.class);
                     break;
                 default:
                     System.err.println("Unknown mode: " + args[0]);
