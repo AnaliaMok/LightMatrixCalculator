@@ -1,26 +1,20 @@
 package gui;
 
-import com.sun.javafx.geom.BaseBounds;
-import com.sun.javafx.geom.transform.BaseTransform;
-import com.sun.javafx.jmx.MXNodeAlgorithm;
-import com.sun.javafx.jmx.MXNodeAlgorithmContext;
-import com.sun.javafx.sg.prism.NGNode;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import model.MatrixModel;
+
 
 /**
  * Class that is used to represent a matrix (and a scalar quantity).
- * The entire object will be a "box" containing input fields for
+ * The entire object will be a "matrixIn" containing input fields for
  * the matrix, and input fields for the dimensions of the matrix.
  * The object will also contain a "set" button to change the size
  * of the matrix.
@@ -34,16 +28,23 @@ public class InputBox{
 
    /**
      * The current dimensions of the input section
-     * of the input box
+     * of the input matrixIn
      */
     private int[] dims;
 
 
     /**
-     * The box is a GridPane to hold the matrix input,
+     * Main container for the matrixIn GridPane
+     * amd HBox dimInput
+     */
+    private VBox box;
+
+
+    /**
+     * The matrixIn is a GridPane to hold the matrix input,
      * dimension inputs, and "set" button
      */
-    private GridPane box;
+    private GridPane matrixIn;
 
 
     /**
@@ -54,23 +55,28 @@ public class InputBox{
 
 
     /**
-     * Constructor Method
-     * @param dims Dimensions of Matrix Input
+     * Main Constructor Method that creates the default
+     * 3x3 matrix input, the dimension input matrixIn, and
+     * the set button.
      */
-    public InputBox(int[] dims){
+    public InputBox(){
         // Copying Over Dimensions
         this.dims = new int[2];
-        this.dims[0]  = dims[0];
-        this.dims[1] = dims[1];
+        this.dims[0]  = 3;
+        this.dims[1] = 3;
 
-        // Creating box
-        this.box = new GridPane();
+        // Initializing VBox box
+        this.box = new VBox();
+        this.box.setAlignment(Pos.CENTER);
+
+        // Creating matrixIn
+        this.matrixIn = new GridPane();
         // Set internal spacing //TODO: May need to adjust value
-        this.box.setHgap(10);
-        this.box.setVgap(10);
+        this.matrixIn.setHgap(10);
+        this.matrixIn.setVgap(10);
 
-        // Giving box padding
-        this.box.setPadding(new Insets(20));
+        // Giving matrixIn padding
+        this.matrixIn.setPadding(new Insets(20));
 
 
         // Adding TextFields for Matrix Input
@@ -83,7 +89,9 @@ public class InputBox{
             int col = i % totalCols;
             TextField input = new TextField();
             input.setAlignment(Pos.CENTER);
-            this.box.add(input, col, row);
+            this.matrixIn.add(input, col, row);
+            /*int index = this.matrixIn.getChildren().indexOf(input);
+            input.setText(String.valueOf(index));*/
         }
 
         // Creating & Adding Dimension Input
@@ -94,7 +102,7 @@ public class InputBox{
         leftDimIn.setAlignment(Pos.CENTER);
         // RIGHT DIMENSION INPUT
         TextField rightDimIn = new TextField(String.valueOf(this.dims[1]));
-        rightDimIn.setAlignment(Pos.CENTER);
+        rightDimIn.setAlignment(Pos.TOP_CENTER);
 
         // Initializing HBox dimInput field
         this.dimInput = new HBox();
@@ -102,10 +110,11 @@ public class InputBox{
         GridPane.setColumnSpan(this.dimInput, 3);
         this.dimInput.setAlignment(Pos.CENTER);
         this.dimInput.setSpacing(10);
+        this.dimInput.setPadding(new Insets(10, 0, 20, 0));
 
         // Adding dimInput to GridPane
-        int currRow = this.dims[0]+2; // Last filled row of matrix input + 2
-        this.box.add(this.dimInput, 0, currRow);
+        /*int currRow = this.dims[0]+2; // Last filled row of matrix input + 2
+        this.matrixIn.add(this.dimInput, 0, currRow);*/
 
         // Set button
         Button setBtn = new Button("Set");
@@ -130,12 +139,16 @@ public class InputBox{
         });
 
         // Alignment and Size Properties of setBtn
-        GridPane.setHalignment(setBtn, HPos.CENTER);
-        setBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        /*GridPane.setHalignment(setBtn, HPos.CENTER);
+        setBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);*/
+        setBtn.setPrefWidth(100); //TODO: Change With CSS for percentages
 
         // Place right under the by button
         // row = currRow+1, col = 2
-        this.box.add(setBtn, 1, currRow+1);
+        //this.matrixIn.add(setBtn, 1, currRow+1);
+
+        // Adding All Individual Components to the VBox
+        this.box.getChildren().addAll(this.matrixIn, this.dimInput, setBtn);
 
     } // End of constructor
 
@@ -145,7 +158,7 @@ public class InputBox{
      * (the InputBox)
      * @return A GridPane
      */
-    public GridPane getInputBox(){
+    public VBox getInputBox(){
         return this.box;
     }
 
@@ -170,9 +183,11 @@ public class InputBox{
         if(rows != this.dims[0]){
             rowDiff = this.dims[0] - rows;
             if(rowDiff < 0){
-                remove = true;
-            }else if(rowDiff > 0){
+                // New row size is larger
                 remove = false;
+            }else if(rowDiff > 0){
+                // New row size is smaller
+                remove = true;
             }
 
             int currRow = this.dims[0]-1; // Last row in matrix input
@@ -188,17 +203,28 @@ public class InputBox{
                     currRow++;
                 }
 
+                // Current Index = (currRow * total cols) + col 0
+                int currIdx = (currRow * this.dims[0]);
                 for(int c = 0; c < this.dims[1]; c++){
-                    if(!remove){
+                    if(remove){
+                        // Removing text fields
+                        // Index is same because as nodes are removed from left
+                        // to right of a given row, the indices of the children
+                        // are updated
+                        this.matrixIn.getChildren().remove(currIdx);
+                        if(c == this.dims[1]-1){
+                            // If at last row
+                            currRow--;
+                        }
+                    }else {
                         // Adding text fields
                         TextField newTField = new TextField();
                         newTField.setAlignment(Pos.CENTER);
-                        this.box.add(newTField, c, currRow);
-                    }else {
-                        // Removing text fields
-                        // Current Index = (currRow * total cols) + currCol
-                        int currIdx = (currRow * this.dims[0]) + c;
-                        this.box.getChildren().remove(currIdx);
+                        this.matrixIn.add(newTField, c, currRow);
+                        if(c == this.dims[1]-1){
+                            // If at last row
+                            currRow++;
+                        }
                     }
                 } // End of inner loop
 
@@ -218,7 +244,23 @@ public class InputBox{
         }
         // Else do nothing because sizes are same
 
+        // Now changing current dimensions
+        // - regardless of value difference
+        this.dims[0] = rows;
+        this.dims[1] = cols;
+
     } // End of resize
+
+
+    /**
+     * Retrieves data found in matrixIn and constructs
+     * a MatrixModel instance to be returned and used later
+     * @return A MatrixModel object
+     */
+    public MatrixModel getMatrix(){
+        // TODO
+        return null;
+    } // End of getMatrix
 
 } // End of InputBox
 

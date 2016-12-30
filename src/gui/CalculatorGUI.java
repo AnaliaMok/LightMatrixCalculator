@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.CalculationsModel;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -17,6 +18,12 @@ public class CalculatorGUI extends Application implements Observer{
 
 
     /**
+     * CalculationModel instance for executing calculations
+     */
+    private CalculationsModel calcModel;
+
+
+    /**
      * Used to initialize all components/nodes of the beginning window.
      * @param primaryStage Main window
      * @throws Exception
@@ -24,11 +31,15 @@ public class CalculatorGUI extends Application implements Observer{
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        // Main Layout
         BorderPane mainLayout = new BorderPane();
+
+        // Initializing
+        this.calcModel = new CalculationsModel();
 
         // Creating Single InputBox
         int[] dims = {3 ,3};
-        InputBox input1 = new InputBox(dims);
+        InputBox input1 = new InputBox();
 
         // Adding InputBox to layout
         mainLayout.setCenter(input1.getInputBox());
