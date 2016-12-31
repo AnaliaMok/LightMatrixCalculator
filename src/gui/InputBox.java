@@ -1,8 +1,10 @@
 package gui;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -138,6 +140,7 @@ public class InputBox{
 
         });
 
+
         // Alignment and Size Properties of setBtn
         /*GridPane.setHalignment(setBtn, HPos.CENTER);
         setBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);*/
@@ -203,9 +206,14 @@ public class InputBox{
                     currRow++;
                 }
 
-                // Current Index = (currRow * total cols) + col 0
-                int currIdx = (currRow * this.dims[0]);
-                for(int c = 0; c < this.dims[1]; c++){
+                System.out.println("Current Row: " + currRow);
+                // Removing Cells from the rightmost column toward the left
+                for(int c = this.dims[1]-1; c >= 0; c--){
+                    System.out.print("Current Column: " + c + "\t");
+                    // Current Index = (currRow + total cols) * currCol
+                    int currIdx = (currRow * this.dims[1]) + c;
+                    System.out.println("Index " + currIdx);
+
                     if(remove){
                         // Removing text fields
                         // Index is same because as nodes are removed from left

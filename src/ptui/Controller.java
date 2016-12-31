@@ -287,7 +287,7 @@ public class Controller {
 
         /*MatrixModel test = acceptMatrix(in);
 
-        System.out.println(CalculationsModel.getDeterminant(test));*/
+        System.out.println(test.getIdentity().toString());*/
 
         in.close();
         System.exit(0);

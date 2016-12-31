@@ -222,13 +222,18 @@ public class MatrixModel {
         // Initializing identity matrix
         this.identity = new ArrayList<Number>(this.dims[0]*this.dims[1]);
 
-        // Iterate Based on the Number of Rows
-        for(int row = 0; row < this.dims[0]; row++){
-            // Current Index = currRow * totalColumns + currCol
-            // (which is equal to the currRow)
-            int currIdx = (row * this.dims[1]) + row;
-            this.identity.remove(currIdx);
-            this.identity.add(currIdx, 1);
+        int totalElem = this.dims[0]*this.dims[1];
+        for(int i = 0; i < totalElem; i++){
+            int currRow = i / this.dims[1];
+            int currCol = i % this.dims[1];
+
+            if(currRow == currCol){
+                // Add a One on a diagonal entry
+                this.identity.add(1);
+            }else{
+                // Otherwise add a zero
+                this.identity.add(0);
+            }
         }
 
     } // End of makeIdentity
