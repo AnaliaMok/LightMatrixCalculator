@@ -188,7 +188,7 @@ public class InputBox{
             if(rowDiff < 0){
                 // New row size is larger
                 remove = false;
-            }else if(rowDiff > 0){
+            }else{
                 // New row size is smaller
                 remove = true;
             }
@@ -200,39 +200,40 @@ public class InputBox{
             for(int i = 0; i < rowDiff; i++){
                 // Iterating for number of rows to either
                 // add or delete
+
                 if(!remove){
                     // If not removing nodes, then need to start adding
                     // at row currRow+1 which is == this.dims[0]
                     currRow++;
                 }
 
-                System.out.println("Current Row: " + currRow);
+                //System.out.println("Current Row: " + currRow);
                 // Removing Cells from the rightmost column toward the left
+                // of a given row
                 for(int c = this.dims[1]-1; c >= 0; c--){
-                    System.out.print("Current Column: " + c + "\t");
+                    //System.out.print("Current Column: " + c + "\t");
                     // Current Index = (currRow + total cols) * currCol
                     int currIdx = (currRow * this.dims[1]) + c;
-                    System.out.println("Index " + currIdx);
 
                     if(remove){
                         // Removing text fields
-                        // Index is same because as nodes are removed from left
-                        // to right of a given row, the indices of the children
-                        // are updated
+
                         this.matrixIn.getChildren().remove(currIdx);
-                        if(c == this.dims[1]-1){
-                            // If at last row
-                            currRow--;
-                        }
+                        //System.out.println("Remove Index " + currIdx);
+
+                        // Decrement current row index for removing
+                        // new bottommost row
+                        if(c == 0) currRow--;
                     }else {
                         // Adding text fields
                         TextField newTField = new TextField();
                         newTField.setAlignment(Pos.CENTER);
                         this.matrixIn.add(newTField, c, currRow);
-                        if(c == this.dims[1]-1){
-                            // If at last row
-                            currRow++;
-                        }
+                        //System.out.println("Added Index " + currIdx);
+
+                        // Increment current row index for adding
+                        // another row later
+                        if(c == 0) currRow++;
                     }
                 } // End of inner loop
 
@@ -242,19 +243,68 @@ public class InputBox{
 
         // Else do nothing because sizes are same
 
-        // Adjust Column Size
-        if(cols > this.dims[1]){
-            // If new column size is greater than
-            // current column size
-            // TODO
-        }else if(cols < this.dims[1]){
-            // TODO
-        }
-        // Else do nothing because sizes are same
-
-        // Now changing current dimensions
+        // Now changing current row
         // - regardless of value difference
         this.dims[0] = rows;
+
+
+        // Adjust Column Size
+        if(cols != this.dims[1]){
+            colDiff = this.dims[1] - cols;
+            if(colDiff < 0){
+                // New column size is larger
+                remove = false;
+            }else{
+                // New column size is smaller
+                remove = true;
+            }
+
+            // Use absolute value of column difference
+            colDiff = Math.abs(colDiff);
+
+            // Rightmost column
+            int currCol = this.dims[1]-1;
+
+            // Adding or removing from the bottommost & rightmost cell upward
+            for(int i = 0; i < colDiff; i++){
+                // If adding cells, increment current column index
+                if(!remove) currCol++;
+
+                for(int r = this.dims[0]-1; r >= 0; r--){
+                    // Current Index
+                    int currIdx = (r * this.dims[1]) + currCol;
+
+                    if(remove){
+                        // Remove text fields
+                        this.matrixIn.getChildren().remove(currIdx);
+
+                        // Decrement current column index to remove
+                        // next rightmost column
+                        if(r == 0) currCol--;
+
+                    }else{
+                        // Add text fields
+                        TextField newTField = new TextField();
+                        newTField.setAlignment(Pos.CENTER);
+                        this.matrixIn.add(newTField, currCol, r);
+
+                        // Increment current column index for adding
+                        // another column later
+                        if(r == 0) currCol++;
+
+                    }
+
+                } // End of inner loop
+
+            } // End of outer loop
+
+
+        } // End of column difference condition
+
+        // Else do nothing because sizes are same
+
+        // Now changing current column
+        // - regardless of value difference
         this.dims[1] = cols;
 
     } // End of resize
