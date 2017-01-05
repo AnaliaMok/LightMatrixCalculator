@@ -92,8 +92,8 @@ public class InputBox{
             TextField input = new TextField();
             input.setAlignment(Pos.CENTER);
             this.matrixIn.add(input, col, row);
-            /*int index = this.matrixIn.getChildren().indexOf(input);
-            input.setText(String.valueOf(index));*/
+            /*int index = this.matrixIn.getChildren().indexOf(input);*/
+            /*input.setText(row + ", " + col);//*/
         }
 
         // Creating & Adding Dimension Input
@@ -130,8 +130,13 @@ public class InputBox{
                 int rows = Integer.parseInt(leftDim);
                 int cols = Integer.parseInt(rightDim);
 
+                /*System.out.printf("INIT DIMS: [%d, %d]\n",
+                        this.dims[0], this.dims[1]);*/
+
                 // Resize Matrix Input based on rows and cols
                 resize(rows, cols);
+                /*System.out.printf("FINAL DIMS: [%d, %d]\n\n",
+                        this.dims[0], this.dims[1]);*/
 
             }catch (NumberFormatException nfe){
                 // If non-numeric values inputted
@@ -229,6 +234,8 @@ public class InputBox{
                         TextField newTField = new TextField();
                         newTField.setAlignment(Pos.CENTER);
                         this.matrixIn.add(newTField, c, currRow);
+
+                        /*newTField.setText(currRow + ", " + c);*/
                         //System.out.println("Added Index " + currIdx);
 
                         // Increment current row index for adding
@@ -246,6 +253,9 @@ public class InputBox{
         // Now changing current row
         // - regardless of value difference
         this.dims[0] = rows;
+
+        /*System.out.printf("Dimensions after row change: [%d, %d]\n",
+                this.dims[0], this.dims[1]);*/
 
 
         // Adjust Column Size
@@ -275,7 +285,7 @@ public class InputBox{
                     int currIdx = (r * this.dims[1]) + currCol;
 
                     if(remove){
-                        // Remove text fields
+                        // Remove text field
                         this.matrixIn.getChildren().remove(currIdx);
 
                         // Decrement current column index to remove
@@ -288,6 +298,7 @@ public class InputBox{
                         newTField.setAlignment(Pos.CENTER);
                         this.matrixIn.add(newTField, currCol, r);
 
+                        /*newTField.setText(r + ", " + currCol);*/
                         // Increment current column index for adding
                         // another column later
                         if(r == 0) currCol++;
@@ -306,6 +317,9 @@ public class InputBox{
         // Now changing current column
         // - regardless of value difference
         this.dims[1] = cols;
+
+        /*System.out.printf("Dimensions after column change: [%d, %d]\n",
+                this.dims[0], this.dims[1]);*/
 
     } // End of resize
 
