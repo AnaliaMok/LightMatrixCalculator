@@ -230,6 +230,7 @@ public class InputBox{
                         // new bottommost row
                         if(c == 0) currRow--;
                     }else {
+
                         // Adding text fields
                         TextField newTField = new TextField();
                         newTField.setAlignment(Pos.CENTER);
