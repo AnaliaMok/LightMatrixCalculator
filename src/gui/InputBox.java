@@ -179,118 +179,29 @@ public class InputBox{
      * @param rows New total row number
      * @param cols New total column number
      */
-    private void resize(int rows, int cols){ // TODO: Consider Clearing entire grid & re-adding elements
+    private void resize(int rows, int cols){
 
-        // Row and column difference between the current
-        // dimensions and the new dimensions
-        int rowDiff = this.dims[0] - rows;
-        int colDiff = this.dims[1] - cols;
+        if(!(this.dims[0] == rows && this.dims[1] == cols)){
+            // Do nothing if dimensions are exactly the same
 
-        // Initializing Current row and column indexes
-        int currRow = this.dims[0]-1, currCol = this.dims[1]-1;
+            // Re-assigning dimensions
+            this.dims[0] = rows;
+            this.dims[1] = cols;
 
-        // Boolean value to determine whether or not rows and/or
-        // columns need to be removed
-        // Initial value depends on row difference since rows
-        // are adjusted first
-        boolean remove = (rowDiff > 0);
+            // Clearing Observable list of GridPane
+            this.matrixIn.getChildren().clear();
 
-        System.out.printf("Current Dims: [%d, %d]\n", this.dims[0], this.dims[1]);
-        System.out.println("Size of matrixIn list: " + this.matrixIn.getChildren().size());
-
-        // Adjusting rows first
-        if(rowDiff < 0){
-            // Need to take the absolute value before looping
-            rowDiff = Math.abs(rowDiff);
-            // need to increment currRow to start adding nodes to the GridPane
-            currRow++;
-        }
-
-        if(rowDiff != 0) { // Skip if no change was designated
-
-            for (int i = 0; i < rowDiff; i++) {
-
-                if(remove){
-                    // Start index = current row * totalCols + 0 <- Column 0
-                    // End index = current row * totalCols + currCol <- Last Column
-                    int startIdx = (currRow * this.dims[1]);
-                    int endIdx = (currRow * this.dims[1]) + currCol;
-
-                    // Removes all nodes in last row
-                    this.matrixIn.getChildren().remove(startIdx, endIdx + 1);
-                    currRow--; // Now one less available row
-                }else{
-                    // Adding nodes
-                    // NOTE: Can't simply add to matrixIn's Observable list because
-                    // of the dimension input and set button
-                    for (int c = 0; c < this.dims[1]; c++) {
-                        //int currIdx = (currRow * this.dims[1]) + c;
-                        // Creating new TextField with center alignment
-                        TextField input = new TextField();
-                        input.setAlignment(Pos.CENTER);
-                        //this.matrixIn.add(input, c, currRow);
-                        this.matrixIn.addRow(currRow, input);
-                    }
-
-                    currRow++; // Move next row index for any additional rows
-                }
+            // Adding TextFields for Matrix Input
+            int totalElem = rows * cols;
+            for (int i = 0; i < totalElem; i++) {
+                int row = i / cols;
+                int col = i % cols;
+                TextField input = new TextField();
+                input.setAlignment(Pos.CENTER);
+                this.matrixIn.add(input, col, row);
             }
-        } // End of rowDiff conditional
 
-        // Updating row dimension
-        this.dims[0] = rows;
-
-        // Adjusting Columns
-        remove = (colDiff > 0);
-
-        if(colDiff < 0){
-            // Need to take absolute value before looping
-            colDiff = Math.abs(colDiff);
-            // Need to increment current column index
-            // before adding cells
-            currCol++;
         }
-
-        if(colDiff != 0){ // Skip if no change was designated
-
-            for(int i = 0; i < colDiff; i++){
-
-                for(int r = this.dims[0]-1; r >= 0; r--){
-                    // Incrementing backwards for removing cells
-
-                    if(remove){
-                        // Remove cells
-                        // Current Index = (current row * totalCols) + current column
-                        int currIdx = (r * this.dims[1]) + currCol;
-                        System.out.println("Index: " + currIdx);
-
-                        Node n = this.matrixIn.getChildren().get(currIdx);
-                        this.matrixIn.getChildren().remove(n);
-
-                        // Decrement after removing last cell in currCol
-                        if(r == 0) currCol--;
-
-                    }else{
-                        // Add cells
-                        // Creating new TextField with center alignment
-                        TextField input = new TextField();
-                        input.setAlignment(Pos.CENTER);
-                        this.matrixIn.addColumn(currCol, input);
-
-                        // Increment after adding last cell in currCol
-                        if(r == 0) currCol++;
-
-                    }
-
-                }
-            }
-        } // End of colDiff conditional
-
-        // Adjusting column dimension
-        this.dims[1] = cols;
-
-        System.out.printf("New Dims: [%d, %d]\n", this.dims[0], this.dims[1]);
-        System.out.println("Size of matrixIn list: " + this.matrixIn.getChildren().size());
 
     } // End of resize
 
