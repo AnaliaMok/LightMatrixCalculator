@@ -1,9 +1,16 @@
 package gui;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import jdk.internal.util.xml.impl.Input;
 import model.CalculationsModel;
 
 import java.util.Observable;
@@ -37,16 +44,41 @@ public class CalculatorGUI extends Application implements Observer{
         // Initializing
         this.calcModel = new CalculationsModel();
 
-        // Creating Single InputBox
-        int[] dims = {3 ,3};
-        InputBox input1 = new InputBox();
+        VBox center = new VBox();
+        center.setAlignment(Pos.TOP_CENTER);
 
-        // Adding InputBox to layout
-        mainLayout.setCenter(input1.getInputBox());
+        // VBox holding the label and radio buttons for
+        // selecting between single matrix input and
+        // two matrix input
+        HBox modeSelector = new HBox();
+        modeSelector.setAlignment(Pos.CENTER);
+        modeSelector.setSpacing(10.0);
+        modeSelector.setPadding(new Insets(5.0, 10.0, 5.0, 10.0));
+
+        Label modeTitle = new Label("Select Mode:");
+        modeTitle.setPadding(new Insets(5.0)); // TODO: adjust as necessary
+
+        ToggleGroup modes = new ToggleGroup();
+
+        RadioButton singleMode = new RadioButton("Single");
+        singleMode.setToggleGroup(modes);
+        singleMode.setSelected(true); // Single Mode is the default mode when application is first opened
+
+        RadioButton doubleMode = new RadioButton("Double");
+        doubleMode.setToggleGroup(modes);
+
+        modeSelector.getChildren().addAll(modeTitle, singleMode, doubleMode);
+
+        // Creating Matrix Input Box
+        InputBox inputOne = new InputBox();
+
+        center.getChildren().addAll(modeSelector, inputOne.getInputBox());
+
+        mainLayout.setCenter(center);
 
         // Scene Creation & Setting
         // Window Displaying
-        Scene scene = new Scene(mainLayout, 500, 500);
+        Scene scene = new Scene(mainLayout, 600, 600);
         primaryStage.setTitle("Matrix Calculator");
         primaryStage.setScene(scene);
         primaryStage.show();

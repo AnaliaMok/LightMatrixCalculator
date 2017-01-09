@@ -1,5 +1,10 @@
 package gui;
 
+import com.sun.javafx.geom.BaseBounds;
+import com.sun.javafx.geom.transform.BaseTransform;
+import com.sun.javafx.jmx.MXNodeAlgorithm;
+import com.sun.javafx.jmx.MXNodeAlgorithmContext;
+import com.sun.javafx.sg.prism.NGNode;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -76,6 +81,7 @@ public class InputBox{
         // Set internal spacing //TODO: May need to adjust value
         this.matrixIn.setHgap(10);
         this.matrixIn.setVgap(10);
+        this.matrixIn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         // Giving matrixIn padding
         this.matrixIn.setPadding(new Insets(20));
@@ -130,15 +136,6 @@ public class InputBox{
                 // Resize Matrix Input based on rows and cols
                 resize(rows, cols);
 
-                // Reassign Index of children
-                /*int totalEl = this.dims[0]*this.dims[1];
-                for(int i = 0; i < totalEl; i++){
-                    int currRow = i / this.dims[1];
-                    int currCol = i % this.dims[1];
-                    TextField curr = (TextField)this.matrixIn.getChildren().get(i);
-                    curr.setText(String.valueOf(this.matrixIn.getChildren().indexOf(curr)));
-                }*/
-
             }catch (NumberFormatException nfe){
                 // If non-numeric values inputted
                 // TODO: Create an Alert Box
@@ -160,16 +157,6 @@ public class InputBox{
         this.box.getChildren().addAll(this.matrixIn, this.dimInput, setBtn);
 
     } // End of constructor
-
-
-    /**
-     * Getter method for the Node of GridPane
-     * (the InputBox)
-     * @return A GridPane
-     */
-    public VBox getInputBox(){
-        return this.box;
-    }
 
 
     /**
@@ -207,13 +194,41 @@ public class InputBox{
 
 
     /**
+     * Getter method for the InputBox
+     * (Technically returns the VBox holding all the components
+     * of the InputBox)
+     *
+     * @return The VBox holding the matrix input, dimension input &
+     *      set button
+     */
+    public VBox getInputBox(){ return this.box; }
+
+
+    /**
      * Retrieves data found in matrixIn and constructs
      * a MatrixModel instance to be returned and used later
      * @return A MatrixModel object
      */
     public MatrixModel getMatrix(){
-        // TODO
-        return null;
+
+        MatrixModel matrix = new MatrixModel(this.dims);
+
+        ObservableList<Node> gridChildren = this.matrixIn.getChildren();
+
+        int totalElem = this.dims[0] * this.dims[1];
+        for(int i = 0; i < totalElem; i++){
+
+            int row = i / this.dims[1];
+            int col = i % this.dims[1];
+
+            // Grabbing the text from the textfield at index i of the matrix input gridpane
+            // Then Converting to an integer
+            double currVal = Double.parseDouble(((TextField)gridChildren.get(i)).getText());
+            matrix.insert(currVal, row, col);
+
+        }
+
+        return matrix;
     } // End of getMatrix
 
 } // End of InputBox
