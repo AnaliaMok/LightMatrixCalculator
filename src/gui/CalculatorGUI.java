@@ -5,10 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.CalculationsModel;
 import model.MatrixModel;
@@ -38,7 +35,9 @@ public class CalculatorGUI extends Application implements Observer{
 
     /**
      * HBox holding the Label and Buttons for
-     * the calculations
+     * the calculations (Has 2 Children - which will be 2
+     * VBoxes, each starting with a label &
+     * followed by a variable amount of buttons)
      */
     private HBox calcButtons;
 
@@ -75,6 +74,7 @@ public class CalculatorGUI extends Application implements Observer{
         // Creating BOTTOM of mainLayout
         makeCalcButtons(mainLayout);
 
+
         // Scene Creation & Setting
         // Window Displaying
         Scene scene = new Scene(mainLayout, 600, 600);
@@ -110,7 +110,7 @@ public class CalculatorGUI extends Application implements Observer{
 
         // Initializing inputDisplay VBox
         this.inputDisplay = new VBox();
-        //this.inputDisplay.setAlignment(Pos.TOP_CENTER);
+        this.inputDisplay.setAlignment(Pos.CENTER);
         this.inputDisplay.setPadding(new Insets(0, 10.0, 0, 0));
 
         // MODE SELECTOR CREATION
@@ -138,10 +138,10 @@ public class CalculatorGUI extends Application implements Observer{
         inputContainer.setAlignment(Pos.CENTER);
 
         // TextField for entering a scalar
-        TextField scalarInput = new TextField();
+        /*TextField scalarInput = new TextField();
         scalarInput.setPromptText("Enter scalar value"); // TODO: Add listener to grab Number
         // By default, input is not visible. Becomes visible when SMULT buttons is pressed
-        scalarInput.setVisible(false);
+        scalarInput.setVisible(false);*/
 
         // Creating Matrix Input Box
         InputBox inputOne = new InputBox();
@@ -153,7 +153,7 @@ public class CalculatorGUI extends Application implements Observer{
         // TODO: Add event handler
 
         // ADDING ELEMENTS TO CONTAINERS
-        inputContainer.getChildren().addAll(scalarInput, inputOne.getInputBox(), equalsBtn);
+        inputContainer.getChildren().addAll(inputOne.getInputBox(), equalsBtn);//scalarInput, inputOne.getInputBox(), equalsBtn);
         this.inputDisplay.getChildren().addAll(modeSelector, inputContainer);
 
         // Setting layout center
@@ -174,7 +174,8 @@ public class CalculatorGUI extends Application implements Observer{
         // Container node for labels & Buttons
         this.calcButtons = new HBox();
         this.calcButtons.setSpacing(5.0);
-        this.calcButtons.setPadding(new Insets(0, 10, 10, 10));
+        this.calcButtons.setPadding(new Insets(0, 10, 20, 10));
+        this.calcButtons.setAlignment(Pos.CENTER);
 
         // Single Matrix VBox
         VBox singleBtns = new VBox();
@@ -185,6 +186,11 @@ public class CalculatorGUI extends Application implements Observer{
         Button smultBtn = new Button("SMULT"); // TODO: Add event
         Button transBtn = new Button("TRANS"); // TODO: Add event
         Button invBtn = new Button("INV"); // TODO: Add event
+
+        // Setting Sizes
+        smultBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        transBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        invBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         // TODO: Implement calculation in Calculation Model & Add Event
         //Button powBtn = new Button("POW");
@@ -201,7 +207,15 @@ public class CalculatorGUI extends Application implements Observer{
         Button addBtn = new Button("ADD"); // TODO: Add event
         Button subBtn = new Button("SUB"); // TODO: Add event
 
-        doubleBtns.getChildren().addAll(doubleMatIn,  addBtn, subBtn, mmultBtn);
+        // Setting max sizes
+        mmultBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        addBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        subBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        // Adjusting Clickability of Buttons associated with double
+        // matrix calculations
+
+        doubleBtns.getChildren().addAll(doubleMatIn, addBtn, subBtn, mmultBtn);
 
         // Combining Containers
         this.calcButtons.getChildren().addAll(singleBtns, doubleBtns);
