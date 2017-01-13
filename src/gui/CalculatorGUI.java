@@ -3,13 +3,16 @@ package gui;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
 import model.CalculationsModel;
 import model.MatrixModel;
 
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
@@ -61,9 +64,13 @@ public class CalculatorGUI extends Application implements Observer{
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        // Loading FXML
+        Parent root = FXMLLoader.load(this.getClass().getResource("calculator.fxml"));
+
         // INITIALIZING FIELDS
         BorderPane mainLayout = new BorderPane();
         this.calcModel = new CalculationsModel();
+        this.answers = new LinkedList<MatrixModel>();
 
         // Creating CENTER of mainLayout
         makeInputDisplay(mainLayout);
@@ -223,6 +230,20 @@ public class CalculatorGUI extends Application implements Observer{
         layout.setBottom(this.calcButtons);
 
     } // End of makeCalcButtons
+
+
+    /**
+     * makeDisplay - Method for creating the right hand display of
+     *      the calculator. Display will show the answer of the
+     *      current calculation after the equals buttons is pressed.
+     *      Display will also show previous 5 calculations - all of
+     *      which are clickable.
+     *
+     * @param layout A reference to the main layout BorderPane
+     */
+    private void makeDisplay(BorderPane layout){
+
+    } // End of makeDisplay
 
 
 } // End of CalculatorGUI class
