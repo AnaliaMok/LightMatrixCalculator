@@ -65,10 +65,10 @@ public class CalculatorGUI extends Application implements Observer{
     public void start(Stage primaryStage) throws Exception {
 
         // Loading FXML
-        Parent root = FXMLLoader.load(this.getClass().getResource("calculator.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("calculator.fxml"));
 
         // INITIALIZING FIELDS
-        BorderPane mainLayout = new BorderPane();
+        /*BorderPane mainLayout = new BorderPane();
         this.calcModel = new CalculationsModel();
         this.answers = new LinkedList<MatrixModel>();
 
@@ -84,7 +84,9 @@ public class CalculatorGUI extends Application implements Observer{
 
         // Scene Creation & Setting
         // Window Displaying
-        Scene scene = new Scene(mainLayout, 600, 600);
+        Scene scene = new Scene(mainLayout, 600, 600);*/
+
+        Scene scene = new Scene(root, 600, 600);
         primaryStage.setTitle("Matrix Calculator");
         primaryStage.setScene(scene);
         primaryStage.show();
