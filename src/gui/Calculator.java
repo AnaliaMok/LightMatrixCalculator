@@ -1,9 +1,9 @@
 package gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 
-import java.io.IOException;
 
 /**
  * Calculator.java - File Contains All of the Application
@@ -14,6 +14,9 @@ import java.io.IOException;
  */
 public class Calculator{
 
+    @FXML private HBox modeSelector;
+
+    @FXML private ListView<String> display;
 
 
 } // End of Calculator

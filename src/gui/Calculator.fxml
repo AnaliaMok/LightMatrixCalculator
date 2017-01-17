@@ -33,7 +33,7 @@
    <center>
       <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" spacing="10.0">
+            <HBox fx:id="modeSelector" alignment="CENTER" spacing="10.0">
                <children>
                   <Label text="Select Mode:" />
                   <RadioButton mnemonicParsing="false" selected="true" text="Single">
@@ -48,7 +48,7 @@
                </padding>
             </HBox>
              <fx:include fx:id="inputBox" source="InputBox.fxml" />
-            <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+            <HBox alignment="BOTTOM_CENTER" spacing="10.0">
                <children>
                   <VBox spacing="8.0">
                      <children>

@@ -1,12 +1,7 @@
 package gui;
 
-import java.io.IOException;
-
-import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -63,9 +58,10 @@ public class InputBox extends VBox{
         this.dims = new int[2];
         this.dims[0] = 3; this.dims[1] = 3;
 
+
         // Adding Listeners to Dimensional Input
         // Whenever a value is changed, the Matrix Input will be resized
-        this.leftDimIn.textProperty().addListener((o, oldValue, newValue) -> {
+        /*this.leftDimIn.textProperty().addListener((o, oldValue, newValue) -> {
             // Row value change
             try{
                 this.dims[0] = Integer.parseInt(newValue);
@@ -92,7 +88,7 @@ public class InputBox extends VBox{
                 System.err.println("USAGE: Please Enter Numeric Values");
             }
 
-        });
+        });*/
 
 
     } // End of constructor
@@ -109,17 +105,6 @@ public class InputBox extends VBox{
 
 
     } // End of resize
-
-
-    /**
-     * Getter method for the InputBox
-     * (Technically returns the VBox holding all the components
-     * of the InputBox)
-     *
-     * @return The VBox holding the matrix input, dimension input &
-     *      set button
-     */
-    public VBox getInputBox(){ return this.box; }
 
 
     /**
@@ -148,6 +133,7 @@ public class InputBox extends VBox{
 
         return matrix;
     } // End of getMatrix
+
 
 } // End of InputBox
 
