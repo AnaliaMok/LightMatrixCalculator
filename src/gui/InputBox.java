@@ -1,17 +1,13 @@
 package gui;
 
-import com.sun.javafx.geom.BaseBounds;
-import com.sun.javafx.geom.transform.BaseTransform;
-import com.sun.javafx.jmx.MXNodeAlgorithm;
-import com.sun.javafx.jmx.MXNodeAlgorithmContext;
-import com.sun.javafx.sg.prism.NGNode;
+import java.io.IOException;
+
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -20,18 +16,15 @@ import model.MatrixModel;
 
 
 /**
- * Class that is used to represent a matrix (and a scalar quantity).
- * The entire object will be a "matrixIn" containing input fields for
- * the matrix, and input fields for the dimensions of the matrix.
- * The object will also contain a "set" button to change the size
- * of the matrix.
- *
- * The inputs need to be able to be dynamically sized, so
- * that's why there is a separate class for the inputs.
+ * Calculator Class for InputBox.fxml
+ * InputBox is a Custom Control whose basis is a VBox
+ *      - Accepts matrix input
+ *      - Accepts dimensional changes
+ *      - Changes total available text inputs for matrix input
  *
  * @author Analia Mok
  */
-public class InputBox{
+public class InputBox extends VBox{
 
    /**
      * The current dimensions of the input section
@@ -39,26 +32,23 @@ public class InputBox{
      */
     private int[] dims;
 
+    /**
+     * The VBox containing all contents of the InputBox control
+     */
+    @FXML private VBox box;
 
     /**
-     * Main container for the matrixIn GridPane
-     * amd HBox dimInput
+     * The GridPane representing the input interface for
+     * matrices
      */
-    private VBox box;
-
+    @FXML private GridPane matrixIn;
 
     /**
-     * The matrixIn is a GridPane to hold the matrix input,
-     * dimension inputs, and "set" button
+     * the HBox containing the text fields that accept
+     * Matrix dimensions changes. By default, each TextField
+     * starts with text="3"
      */
-    private GridPane matrixIn;
-
-
-    /**
-     * Container layout for the dimensional input
-     * fields
-     */
-    private HBox dimInput;
+    @FXML private HBox dimIn;
 
 
     /**
@@ -67,96 +57,20 @@ public class InputBox{
      * the set button.
      */
     public InputBox(){
-        // Copying Over Dimensions
-        this.dims = new int[2];
-        this.dims[0]  = 3;
-        this.dims[1] = 3;
 
-        // Initializing VBox box
-        this.box = new VBox();
-        this.box.setAlignment(Pos.CENTER);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("InputBox.fxml"));
+        //fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
 
-        // Creating matrixIn
-        this.matrixIn = new GridPane();
-        // Set internal spacing //TODO: May need to adjust value
-        this.matrixIn.setHgap(10);
-        this.matrixIn.setVgap(10);
-        this.matrixIn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
-        // Giving matrixIn padding
-        this.matrixIn.setPadding(new Insets(20));
-
-        // Adding TextFields for Matrix Input
-        int totalCols = this.dims[1];
-        int totalElem = this.dims[0] * totalCols;
-        for(int i = 0; i < totalElem; i++){
-            int row = i / totalCols;
-            int col = i % totalCols;
-            TextField input = new TextField();
-            input.setAlignment(Pos.CENTER);
-            this.matrixIn.add(input, col, row);
-            /*int index = this.matrixIn.getChildren().indexOf(input);
-            input.setText(String.valueOf(index));*/
+        try{
+            fxmlLoader.load();
+        }catch(IOException ioe){
+            System.err.println("ERROR: InputBox Controller | fxmlLoader failed to load");
+            throw new RuntimeException(ioe);
         }
 
-        // Creating & Adding Dimension Input
-        // Input Boxes Start in row = this.dims[0]+2, col=1
-        Label by = new Label("x"); // The 'x' or 'by' in the dimension
-        // LEFT DIMENSION INPUT
-        TextField leftDimIn = new TextField(String.valueOf(this.dims[0]));
-        leftDimIn.setAlignment(Pos.CENTER);
-        // RIGHT DIMENSION INPUT
-        TextField rightDimIn = new TextField(String.valueOf(this.dims[1]));
-        rightDimIn.setAlignment(Pos.TOP_CENTER);
-
-        // Initializing HBox dimInput field
-        this.dimInput = new HBox();
-        this.dimInput.getChildren().addAll(leftDimIn, by, rightDimIn);
-        GridPane.setColumnSpan(this.dimInput, 3);
-        this.dimInput.setAlignment(Pos.CENTER);
-        this.dimInput.setSpacing(10);
-        this.dimInput.setPadding(new Insets(10, 0, 20, 0));
-
-        // Adding dimInput to GridPane
-        /*int currRow = this.dims[0]+2; // Last filled row of matrix input + 2
-        this.matrixIn.add(this.dimInput, 0, currRow);*/
-
-        // Set button
-        Button setBtn = new Button("Set");
-        setBtn.setOnAction(e -> {
-            // Grabbing Text From Left and Right
-            String leftDim = leftDimIn.getText();
-            String rightDim = rightDimIn.getText();
-
-            try{
-                // Attempt to convert String
-                int rows = Integer.parseInt(leftDim);
-                int cols = Integer.parseInt(rightDim);
-
-                // Resize Matrix Input based on rows and cols
-                resize(rows, cols);
-
-            }catch (NumberFormatException nfe){
-                // If non-numeric values inputted
-                // TODO: Create an Alert Box
-            }
-
-        });
-
-
-        // Alignment and Size Properties of setBtn
-        /*GridPane.setHalignment(setBtn, HPos.CENTER);
-        setBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);*/
-        setBtn.setPrefWidth(100); //TODO: Change With CSS for percentages
-
-        // Place right under the by button
-        // row = currRow+1, col = 2
-        //this.matrixIn.add(setBtn, 1, currRow+1);
-
-        // Adding All Individual Components to the VBox
-        this.box.getChildren().addAll(this.matrixIn, this.dimInput, setBtn);
-
     } // End of constructor
+
 
 
     /**
@@ -166,6 +80,7 @@ public class InputBox{
      * @param rows New total row number
      * @param cols New total column number
      */
+    @FXML
     private void resize(int rows, int cols){
 
         if(!(this.dims[0] == rows && this.dims[1] == cols)){
