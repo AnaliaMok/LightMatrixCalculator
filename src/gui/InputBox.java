@@ -9,9 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import model.MatrixModel;
 
 
@@ -41,14 +39,17 @@ public class InputBox extends VBox{
      * The GridPane representing the input interface for
      * matrices
      */
-    @FXML private GridPane matrixIn;
+    @FXML private TilePane matrixIn;
 
     /**
-     * the HBox containing the text fields that accept
-     * Matrix dimensions changes. By default, each TextField
-     * starts with text="3"
+     * The TextField containing the left dimensional input
      */
-    @FXML private HBox dimIn;
+    @FXML private TextField leftDimIn;
+
+    /**
+     * The TextField containing the right dimensional input
+     */
+    @FXML private TextField rightDimIn;
 
 
     /**
@@ -58,16 +59,41 @@ public class InputBox extends VBox{
      */
     public InputBox(){
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("InputBox.fxml"));
-        //fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
+        // Initializing Dimensions
+        this.dims = new int[2];
+        this.dims[0] = 3; this.dims[1] = 3;
 
-        try{
-            fxmlLoader.load();
-        }catch(IOException ioe){
-            System.err.println("ERROR: InputBox Controller | fxmlLoader failed to load");
-            throw new RuntimeException(ioe);
-        }
+        // Adding Listeners to Dimensional Input
+        // Whenever a value is changed, the Matrix Input will be resized
+        this.leftDimIn.textProperty().addListener((o, oldValue, newValue) -> {
+            // Row value change
+            try{
+                this.dims[0] = Integer.parseInt(newValue);
+                this.matrixIn.setPrefRows(this.dims[0]);
+                // TODO: call resize
+
+            }catch(NumberFormatException nfe){
+                // TODO: Make Alert Box
+                System.err.println("USAGE: Please Enter Numeric Values");
+            }
+
+        });
+
+        this.rightDimIn.textProperty().addListener((o, oldValue, newValue) -> {
+            // Column value change
+
+            try{
+                this.dims[1] = Integer.parseInt(newValue);
+                this.matrixIn.setPrefColumns(this.dims[1]);
+                // TODO: call resize
+
+            }catch(NumberFormatException nfe){
+                // TODO: Make Alert Box
+                System.err.println("USAGE: Please Enter Numeric Values");
+            }
+
+        });
+
 
     } // End of constructor
 
@@ -76,34 +102,11 @@ public class InputBox extends VBox{
     /**
      * resize - method to adjust the size/the amt of TextFields
      *      available for the matrix input
-     *
-     * @param rows New total row number
-     * @param cols New total column number
      */
-    @FXML
-    private void resize(int rows, int cols){
+    protected void resize(){
+        ObservableList<Node> children = matrixIn.getChildren();
+        children.clear();
 
-        if(!(this.dims[0] == rows && this.dims[1] == cols)){
-            // Do nothing if dimensions are exactly the same
-
-            // Re-assigning dimensions
-            this.dims[0] = rows;
-            this.dims[1] = cols;
-
-            // Clearing Observable list of GridPane
-            this.matrixIn.getChildren().clear();
-
-            // Adding TextFields for Matrix Input
-            int totalElem = rows * cols;
-            for (int i = 0; i < totalElem; i++) {
-                int row = i / cols;
-                int col = i % cols;
-                TextField input = new TextField();
-                input.setAlignment(Pos.CENTER);
-                this.matrixIn.add(input, col, row);
-            }
-
-        }
 
     } // End of resize
 

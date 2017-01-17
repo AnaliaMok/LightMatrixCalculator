@@ -14,12 +14,6 @@ import java.io.IOException;
  */
 public class Calculator{
 
-    @FXML
-    private InputBox embeddedInputBox;
-
-    public void initialize(){
-        System.out.println(embeddedInputBox);
-    }
 
 
 } // End of Calculator

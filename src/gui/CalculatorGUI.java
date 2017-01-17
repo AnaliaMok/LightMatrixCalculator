@@ -64,22 +64,8 @@ public class CalculatorGUI extends Application implements Observer{
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        //Parent root = FXMLLoader.load(getClass().getResource("Calculator.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Calculator.fxml"));
-        loader.setRoot(this);
+        Parent root = FXMLLoader.load(getClass().getResource("Calculator.fxml"));
 
-        try{
-
-            Parent p = loader.load();
-            Scene scene = new Scene(p, 600, 600);
-            primaryStage.setTitle("Matrix Calculator");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-        }catch (IOException ioe){
-            System.err.println("ISSUE: Calculator.fxml failed to load!");
-            throw new RuntimeException(ioe);
-        }
 
         // INITIALIZING FIELDS
         /*BorderPane mainLayout = new BorderPane();
@@ -100,10 +86,10 @@ public class CalculatorGUI extends Application implements Observer{
         // Window Displaying
         Scene scene = new Scene(mainLayout, 600, 600);*/
 
-        /*Scene scene = new Scene(root, 600, 600);
+        Scene scene = new Scene(root, 600, 600);
         primaryStage.setTitle("Matrix Calculator");
         primaryStage.setScene(scene);
-        primaryStage.show();*/
+        primaryStage.show();
 
     } // End of start
 
