@@ -32,7 +32,10 @@ public enum Keyword {
     // The corresponding shorthand command of a given keyword
     String shorthand;
 
-    /** Private constructor to help assign shorthands */
+    /**
+     * Private constructor to help assign shorthands
+     * @param shorthand A String value to compute a shortcut from
+     */
     Keyword(String shorthand) {
         this.shorthand = shorthand;
     }
@@ -94,7 +97,7 @@ public enum Keyword {
     /**
      * Precondition: String s is passed in as all uppercase
      * Main getter method to extract a Keyword out of a String
-     * @param s a String to read & extract from
+     * @param s a String to read and extract from
      * @return a Keyword
      */
     public static Keyword getKeyword(String s){

@@ -1,6 +1,5 @@
 package model;
 
-import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Optional;
@@ -427,6 +426,7 @@ public class CalculationsModel extends Observable {
      * Pre-condition: ref field has not been initialized yet
      * Post-condition: answer now holds a MatrixModel object in REF
      * Row reduces the current matrix to Row Echelon Form(REF)
+     * @param m A Reference to a MatrixModel
      */
     public void toREF(MatrixModel m){
         //TODO: Need to implement multiplication first
@@ -438,6 +438,7 @@ public class CalculationsModel extends Observable {
      * Post-condition: answer now holds a MatrixModel object in RREF
      * Row reduces the current ref matrix to Row Reduced Echelon Form
      * Will call toREF if ref field has not been initialized
+     * @param m A reference to a MatrixModel
      */
     public void toRREF(MatrixModel m){
         //TODO: Need to implement multiplication & toREF first
