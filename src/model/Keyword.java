@@ -26,7 +26,7 @@ package model;
  */
 public enum Keyword {
 
-    ADD("A"), SMULT("SM"), MULT("M"), SUB("S"), INVERSE("INV"), TRANSPOSE("T"), REF("REF"), RREF("RREF"),
+    ADD("A"), SMULT("SM"), MULT("M"), SUB("S"), INVERSE("INV"), TRANSPOSE("T"), REF("REF"), RREF("RREF"), DET("DET"),
     ANS("ANS"), DISPLAY("D"), HELP("H"), CLEAR("C"), QUIT("Q"), UNKNOWN("U");
 
     // The corresponding shorthand command of a given keyword
@@ -61,6 +61,7 @@ public enum Keyword {
             case TRANSPOSE: return "TRANSPOSE";
             case REF: return "REF";
             case RREF: return "RREF";
+            case DET: return "DETERMINANT";
             case ANS: return "ANSWER";
             case DISPLAY: return "DISPLAY";
             case HELP: return "HELP";
@@ -84,6 +85,7 @@ public enum Keyword {
             case "T": return TRANSPOSE;
             case "REF": return REF;
             case "RREF": return RREF;
+            case "DET": return DET;
             case "ANS": return ANS;
             case "D": return DISPLAY;
             case "H": return HELP;

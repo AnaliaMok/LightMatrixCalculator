@@ -113,7 +113,7 @@ public class CalculationsModel extends Observable {
                 }
 
                 // Matrices with a determinant of zero are not invertible
-                Number det = MatrixModel.getDeterminant(head);
+                Number det = head.getDeterminant();
 
                 if(det.doubleValue() == 0){
                     System.out.printf("Matrix is not invertible. Determinant = %8.3f\n", det);
@@ -443,6 +443,20 @@ public class CalculationsModel extends Observable {
     public void toRREF(MatrixModel m){
         //TODO: Need to implement multiplication & toREF first
     } // End of toRREF
+
+
+    /**
+     * determinant - Will call the "getter" method for
+     *  determinant in MatrixModel m
+     *
+     * @return A Double representing the determinant value
+     */
+    public double determinant(){
+        // Remove the front of the queue and retrieve its determinant
+        MatrixModel m = this.matrices.poll();
+
+        return m.getDeterminant(); // TODO: May need to do some adjustments with answer optional
+    } // End of determinant
 
 
     /**

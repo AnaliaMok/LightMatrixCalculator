@@ -55,6 +55,7 @@ public class Controller {
         System.out.println("transpose(t)|\tFind the transpose of a matrix");
         System.out.println("ref(ref)\t|\tFind the row echelon form of a matrix");
         System.out.println("rref(rref)\t|\tFind the reduced row echelon form of a matrix");
+        System.out.println("det(det)\t|\tFind the determinant of a matrix");
         System.out.println("ans(ans)\t|\tUse the previous answer in the calculation");
         System.out.println("display(d)\t|\tDisplay the previous answer");
         System.out.println("help(h)\t\t|\tDisplay this help message");
@@ -245,6 +246,20 @@ public class Controller {
                 break;
             case RREF:
                 // TODO
+                break;
+            case DET:
+                // Accept a single matrix
+                this.model.addMatrix(acceptMatrix(in));
+
+                // Find the determinant
+                double d = this.model.determinant();
+
+                if(d % 1 == 0){
+                    System.out.printf("Determinant = %d\n", (int)d);
+                }else{
+                    System.out.printf("Determinant = %8.3f\n", d);
+                }
+
                 break;
             case DISPLAY:
                 // Display Current answer
