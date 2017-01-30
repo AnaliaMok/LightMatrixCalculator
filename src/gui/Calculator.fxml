@@ -53,6 +53,7 @@
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="SMULT" />
                         <Button layoutX="10.0" layoutY="27.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="TRANSPOSE" />
                         <Button layoutX="10.0" layoutY="52.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="INVERSE" />
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="DETERMINANT" />
                      </children>
                   </VBox>
                   <VBox fx:id="doubleMatBtns" spacing="8.0">
