@@ -61,7 +61,7 @@ public class InputBox extends VBox{
 
         // Adding Listeners to Dimensional Input
         // Whenever a value is changed, the Matrix Input will be resized
-        /*this.leftDimIn.textProperty().addListener((o, oldValue, newValue) -> {
+        this.leftDimIn.textProperty().addListener((o, oldValue, newValue) -> {
             // Row value change
             try{
                 this.dims[0] = Integer.parseInt(newValue);
@@ -88,7 +88,7 @@ public class InputBox extends VBox{
                 System.err.println("USAGE: Please Enter Numeric Values");
             }
 
-        });*/
+        });
 
 
     } // End of constructor

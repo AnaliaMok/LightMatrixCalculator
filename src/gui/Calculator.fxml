@@ -45,9 +45,9 @@
                </padding>
             </HBox>
             <fx:include fx:id="inputBox" source="InputBox.fxml" />
-            <HBox alignment="BOTTOM_CENTER" spacing="10.0">
+            <HBox fx:id="calcButtons" alignment="BOTTOM_CENTER" spacing="10.0">
                <children>
-                  <VBox spacing="8.0">
+                  <VBox fx:id="singleMatBtns" spacing="8.0">
                      <children>
                         <Label text="Single Matrix Calculation" textAlignment="CENTER" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="SMULT" />
@@ -55,7 +55,7 @@
                         <Button layoutX="10.0" layoutY="52.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="INVERSE" />
                      </children>
                   </VBox>
-                  <VBox spacing="8.0">
+                  <VBox fx:id="doubleMatBtns" spacing="8.0">
                      <children>
                         <Label text="Double Matrix Calculation" textAlignment="CENTER" />
                         <Button disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="ADD" />
@@ -72,6 +72,6 @@
       </VBox>
    </center>
    <right>
-      <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="display" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </right>
 </BorderPane>

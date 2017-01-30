@@ -26,27 +26,27 @@ public class MatrixModel {
      * Using the Number Class to avoid a Generic Class Declaration
      * and restrict to only Matrices of type Number - and not String
      */
-    private ArrayList<Number> matrix;
+    private ArrayList<Double> matrix;
 
     /**
      * The inverse of the current matrix
      */
-    private ArrayList<Number> inverse;
+    private ArrayList<Double> inverse;
 
     /**
      * The identity matrix of current matrix
      */
-    private ArrayList<Number> identity;
+    private ArrayList<Double> identity;
 
     /**
      * The transpose of the current matrix
      */
-    private ArrayList<Number> transpose;
+    private ArrayList<Double> transpose;
 
     /**
      * The determinant of the current matrix
      */
-    private Number determinant;
+    private Double determinant;
 
     /**
      * Main Constructor of Matrix
@@ -59,11 +59,11 @@ public class MatrixModel {
         // Initial capacity set to total number of values possible
         // with the given dimensions
         int size = dims[0] * dims[1];
-        this.matrix = new ArrayList<Number>(size);
+        this.matrix = new ArrayList<Double>(size);
 
         // Initializing ArrayList with zeroes
         for(int i = 0; i < size; i++){
-            this.matrix.add(0);
+            this.matrix.add(0.0);
         }
 
         // Copying Over Dimensions
@@ -86,7 +86,7 @@ public class MatrixModel {
         this.dims[1]= m.getDims()[1];
 
         // Initializing Current Matrix
-        this.matrix = new ArrayList<Number>(this.dims[0]*this.dims[1]);
+        this.matrix = new ArrayList<Double>(this.dims[0]*this.dims[1]);
         this.matrix.addAll(m.getMatrix());
 
     } // End of copy constructor
@@ -97,11 +97,11 @@ public class MatrixModel {
      * Used to insert values into the matrix (or replace
      * if necessary)
      *
-     * @param value A value of type Number to insert into the matrix
+     * @param value A double to insert into the matrix
      * @param row The row to place the value in
      * @param col the column to place the value in
      */
-    public void insert(Number value, int row, int col){
+    public void insert(Double value, int row, int col){
         // Current Index = currRow * totalColumns + currColumns
         int currIdx = (row * this.dims[1]) + col;
 
@@ -118,9 +118,9 @@ public class MatrixModel {
      *      Values are 0-based
      * @param row An integer representing the row to find a value
      * @param col An integer representing the column to find a value
-     * @return A Number representing the value at (row,col)
+     * @return A Double representing the value at (row,col)
      */
-    Number valueAt(int row, int col){
+    Double valueAt(int row, int col){
         return this.matrix.get((row*this.dims[1])+col);
     } // End of valueAt
 
@@ -130,11 +130,11 @@ public class MatrixModel {
      * @param col An Integer representing what column to retrieve
      * @return A double array
      */
-    ArrayList<Number> colAt(int col){
+    ArrayList<Double> colAt(int col){
 
         // NOTE: The number of elements in a column are equal to the number
         // of rows in a matrix
-        ArrayList<Number> column = new ArrayList<Number>(this.dims[0]);
+        ArrayList<Double> column = new ArrayList<Double>(this.dims[0]);
 
         // Retrieving values at column col
         for(int r = 0; r < this.dims[0]; r++){
@@ -154,13 +154,13 @@ public class MatrixModel {
      * @param row An Integer representing what row to retrieve
      * @return A double array
      */
-    ArrayList<Number> rowAt(int row){
+    ArrayList<Double> rowAt(int row){
 
         int totalCols = this.dims[1];
 
         // NOTE: The number of elements in a row are equal
         // to the number of columns in a matrix
-        ArrayList<Number> result = new ArrayList<Number>(totalCols);
+        ArrayList<Double> result = new ArrayList<Double>(totalCols);
 
         // Retrieving values at row row
         for(int c = 0; c < totalCols; c++){
@@ -188,7 +188,7 @@ public class MatrixModel {
      * Getter method to retrieve the matrix's internals
      * @return An ArrayList of Numbers
      */
-    public ArrayList<Number> getMatrix(){
+    public ArrayList<Double> getMatrix(){
         return this.matrix;
     } // End of getMatrix
 
@@ -199,7 +199,7 @@ public class MatrixModel {
      * already
      * @return identity Matrix
      */
-    protected ArrayList<Number> getIdentity(){
+    protected ArrayList<Double> getIdentity(){
         if(this.identity == null){
             makeIdentity();
         }
@@ -220,7 +220,7 @@ public class MatrixModel {
     private void makeIdentity(){
 
         // Initializing identity matrix
-        this.identity = new ArrayList<Number>(this.dims[0]*this.dims[1]);
+        this.identity = new ArrayList<Double>(this.dims[0]*this.dims[1]);
 
         int totalElem = this.dims[0]*this.dims[1];
         for(int i = 0; i < totalElem; i++){
@@ -229,10 +229,10 @@ public class MatrixModel {
 
             if(currRow == currCol){
                 // Add a One on a diagonal entry
-                this.identity.add(1);
+                this.identity.add(1.0);
             }else{
                 // Otherwise add a zero
-                this.identity.add(0);
+                this.identity.add(0.0);
             }
         }
 
@@ -248,7 +248,7 @@ public class MatrixModel {
      *
      * @return inverse Matrix
      */
-    protected ArrayList<Number> getInverse(){
+    protected ArrayList<Double> getInverse(){
         if(this.inverse == null){
             findInverse();
         }
@@ -313,10 +313,11 @@ public class MatrixModel {
      * NOTE: This method will be used to in the matrix check
      *
      * @param m A MatrixModel to find the determinant of
-     * @return A Number representing the determinant of current matrix
+     * @return A Double representing the determinant of current matrix
      */
-    static Number getDeterminant(MatrixModel m){
-        Number determinant = 0;
+    static Double getDeterminant(MatrixModel m){
+
+        Double determinant = 0.0;
 
         // Checking if current matrix is a 2x2 matrix
         // NOTE: Method is only ever called if Matrix m has
@@ -330,16 +331,12 @@ public class MatrixModel {
         // det = ad - bc
         if(m.getDims()[0] == 2){
             // If matrix is 2x2, then can assume the positions of elements
-            Number a = m.valueAt(0, 0);
-            Number b = m.valueAt(0, 1);
-            Number c = m.valueAt(1, 0);
-            Number d = m.valueAt(1, 1);
+            Double a = m.valueAt(0, 0);
+            Double b = m.valueAt(0, 1);
+            Double c = m.valueAt(1, 0);
+            Double d = m.valueAt(1, 1);
 
-            // Calculating Individual Products for readability sake
-            Number productAD = new BigDecimal(a.toString()).multiply(new BigDecimal(d.toString()));
-            Number productBC = new BigDecimal(b.toString()).multiply(new BigDecimal(c.toString()));
-
-            determinant = new BigDecimal(productAD.toString()).subtract(new BigDecimal(productBC.toString()));
+            determinant = (a*d)-(b*c);
             return determinant;
         }else{
             // NOTE TO SELF: Remember that co-factor expansion formula is one-based
@@ -354,18 +351,19 @@ public class MatrixModel {
                 int currRow = i / totalCols;
                 int currCol = i % totalCols;
 
-                Number value = m.valueAt(currRow, currCol);
+                Double value = m.valueAt(currRow, currCol);
 
                 // The negative one raised to the sum of the currRow and currCol
                 // (1-based)
                 int negation = (int)Math.pow(-1, ((currRow+1)+(currCol+1)));
 
                 // Equation: determinant += negation * value * det(currRow, currCol minor matrix)
-                determinant = new BigDecimal(determinant.toString())
+                /*determinant = new BigDecimal(determinant.toString())
                         .add(new BigDecimal(negation)
                                 .multiply(new BigDecimal(value.toString()))
-                                .multiply(new BigDecimal(getDeterminant(m.getMinorMatrix(currRow, currCol)).toString())));
+                                .multiply(new BigDecimal(getDeterminant(m.getMinorMatrix(currRow, currCol)).toString())));*/
 
+                determinant += negation * value * getDeterminant(m.getMinorMatrix(currRow, currCol));
             }
             return determinant;
         }
@@ -379,7 +377,7 @@ public class MatrixModel {
     private void findInverse(){
 
         // Initializing Inverse
-        this.inverse = new ArrayList<Number>();
+        this.inverse = new ArrayList<Double>();
 
         // Constructing a cofactor matrix
         MatrixModel cofactors = new MatrixModel(this.dims);
@@ -390,17 +388,18 @@ public class MatrixModel {
             int row = i / totalCols;
             int col = i % totalCols;
             // Determinant of row,col-minor matrix
-            Number minorDet = getDeterminant(this.getMinorMatrix(row, col));
+            Double minorDet = getDeterminant(this.getMinorMatrix(row, col));
 
             // Cofactor of element at (row, col) =
             // (-1)^(row+col) * det((row,col)-minor matrix)
-            Number cofactor = new BigDecimal(Math.pow(-1, row+col))
-                    .multiply(new BigDecimal(minorDet.toString()));
+            /*Number cofactor = new BigDecimal(Math.pow(-1, row+col))
+                    .multiply(new BigDecimal(minorDet.toString()));*/
+            Double cofactor = Math.pow(-1, row+col) * minorDet;
             cofactors.insert(cofactor, row, col);
         }
 
         // Getting determinant of matrix using cofactor expansion
-        BigDecimal det = new BigDecimal(0);
+        Double det = 0.0;
 
         // Expanding on the first row, so need to iterate based
         // on total number of columns
@@ -410,12 +409,11 @@ public class MatrixModel {
             int col = i % totalCols;
 
             // Equivalent of : det += this.valueAt(row, col) * cofactors.valueAt(row,col)
-            det = det.add(new BigDecimal(this.valueAt(row, col).toString())
-                    .multiply(new BigDecimal(cofactors.valueAt(row, col).toString())));
+            det += this.valueAt(row, col) * cofactors.valueAt(row, col);
         }
 
         // Adjugate Matrix = the transpose of the cofactor matrix
-        ArrayList<Number> adjugate = cofactors.getTranspose();
+        ArrayList<Double> adjugate = cofactors.getTranspose();
 
         // Multiplying each element in the adjugate by the reciprocal
         // of the determinant and assigning this value to the corresponding
@@ -423,8 +421,9 @@ public class MatrixModel {
         //BigDecimal detReciprocal = new BigDecimal(1).divide(det);
         Double detReciprocal = 1/det.doubleValue();
 
-        for(Number n : adjugate){
-            Number val = new BigDecimal(detReciprocal).multiply(new BigDecimal(n.toString()));
+        for(Double d : adjugate){
+            //Number val = new BigDecimal(detReciprocal).multiply(new BigDecimal(n.toString()));
+            Double val = detReciprocal * d;
             this.inverse.add(val);
         }
 
@@ -436,7 +435,7 @@ public class MatrixModel {
      * Will initialize the transpose field - if it hasn't already
      * @return the transpose field
      */
-    protected ArrayList<Number> getTranspose(){
+    protected ArrayList<Double> getTranspose(){
         if(this.transpose == null){
             findTranspose();
         }
@@ -453,7 +452,7 @@ public class MatrixModel {
     private void findTranspose(){
         // Initializing transpose
         // NOTE: The dimensions of the rows & columns are reversed
-        this.transpose = new ArrayList<Number>();
+        this.transpose = new ArrayList<Double>();
 
         // The order of the dimensions is reversed as a reminder
         // that the dimensions of the transpose is the reverse of
@@ -461,7 +460,7 @@ public class MatrixModel {
         int totalElem = this.dims[1]*this.dims[0];
 
         // Initializing Transpose Array
-        for(int i = 0; i < totalElem; i++) this.transpose.add(0);
+        for(int i = 0; i < totalElem; i++) this.transpose.add(0.0);
 
         for(int i = 0; i < totalElem; i++){
             int row = i / this.dims[1];
@@ -485,7 +484,7 @@ public class MatrixModel {
             // Calculating Current Dimensions
             int row = i / this.dims[1];
             int col = i % this.dims[1];
-            Number num = this.valueAt(row, col);
+            Double num = this.valueAt(row, col);
 
             if(col == 0){
                 // Tabbing over the entire result so
@@ -496,11 +495,23 @@ public class MatrixModel {
 
             if(col == this.dims[1]-1){
                 // Need to start new line
-                result += "" + String.format("%.4f", num) + "\t|\n";
+                // Also checking to see whether to print num
+                // as an integer or some decimal value
+                if(num % 1 == 0){
+                    result += "" + String.format("%d", num) + "\t|\n";
+                }else {
+                    result += "" + String.format("%.4f", num) + "\t|\n";
+                }
                 continue;
             }
 
-            result += "" + String.format("%.4f", num) + "\t";
+            // Checking to see whether to print num as an integer or
+            // some decimal value
+            if(num % 1 == 0){
+                result += "" + String.format("%d", num) + "\t";
+            }else {
+                result += "" + String.format("%.4f", num) + "\t";
+            }
 
         }
 
