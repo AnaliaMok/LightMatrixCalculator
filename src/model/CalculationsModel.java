@@ -205,10 +205,9 @@ public class CalculationsModel extends Observable {
 
             // Add the values at (row,col) in both matrices then insert into
             // answer.
-            Number m1Val = m1.valueAt(row, col);
-            Number m2Val = m2.valueAt(row, col);
-            Number sum = new BigDecimal(m1Val.toString()).add(new BigDecimal(m2Val.toString()));
-            this.answer.get().insert(sum, row, col);
+            double m1Val = m1.valueAt(row, col);
+            double m2Val = m2.valueAt(row, col);
+            this.answer.get().insert(m1Val+m2Val, row, col);
 
         }
 
@@ -241,9 +240,8 @@ public class CalculationsModel extends Observable {
             int col = i % totalCols;
 
             // Multiply the value at (row, col) by the scalar quantity
-            BigDecimal scale = new BigDecimal(scalar);
-            //double product = scalar * m.valueAt(row, col);
-            Number product = new BigDecimal(m.valueAt(row, col).toString()).multiply(scale);
+            double product = scalar * m.valueAt(row, col);
+
             if(this.answer.isPresent()){
                 this.answer.get().insert(product, row, col);
             }
@@ -261,15 +259,13 @@ public class CalculationsModel extends Observable {
      * @param v2 A vector/double array
      * @return A double representing the dot product of v1 & v2
      */
-    private Number dotProd(ArrayList<Number> v1, ArrayList<Number> v2){
-        Number result = 0;
+    private Double dotProd(ArrayList<Double> v1, ArrayList<Double> v2){
+        double result = 0;
 
         // The length of v1 and v2 should be the same length
         // so it doesn't matter which I increment to
         for(int i = 0; i < v1.size(); i++){
-            BigDecimal v1Val = new BigDecimal(v1.get(i).toString());
-            BigDecimal v2Val = new BigDecimal(v2.get(i).toString());
-            result = new BigDecimal(result.toString()).add(v1Val.multiply(v2Val));
+            result += (v1.get(i) * v2.get(i));
         }
 
         return result;
@@ -301,7 +297,7 @@ public class CalculationsModel extends Observable {
         for(int r = 0; r < m1.getDims()[0]; r++){
             // Iterating columns based on the second matrix
             for(int c = 0; c < m2.getDims()[1]; c++){
-                Number product = dotProd(m1.rowAt(r), m2.colAt(c));
+                double product = dotProd(m1.rowAt(r), m2.colAt(c));
                 if(this.answer.isPresent()){
                     this.answer.get().insert(product, r, c);
                 }
@@ -342,12 +338,11 @@ public class CalculationsModel extends Observable {
 
             // Add the values at (row,col) in both matrices then insert into
             // answer.
-            Number m1Val = m1.valueAt(row, col);
-            Number m2Val = m2.valueAt(row, col);
+            double m1Val = m1.valueAt(row, col);
+            double m2Val = m2.valueAt(row, col);
 
-            Number diff = new BigDecimal(m1Val.toString()).subtract(new BigDecimal(m2Val.toString()));
             if(this.answer.isPresent()){
-                this.answer.get().insert(diff, row, col);
+                this.answer.get().insert((m1Val - m2Val), row, col);
             }
         }
 
@@ -366,7 +361,7 @@ public class CalculationsModel extends Observable {
 
         // Remove front of queue
         MatrixModel m = this.matrices.poll();
-        ArrayList<Number> inv = m.getInverse();
+        ArrayList<Double> inv = m.getInverse();
 
         // Grabbing Dimensions of inv(same as m) and
         // calculating total amt of elements
@@ -402,7 +397,7 @@ public class CalculationsModel extends Observable {
 
         // Remove the front of the queue & retrieve it's transpose
         MatrixModel m = this.matrices.poll();
-        ArrayList<Number> transpose = m.getTranspose();
+        ArrayList<Double> transpose = m.getTranspose();
 
         // NOTE: Dimensions of a transpose are equal to the swapped
         // dimensions of the its original matrix
